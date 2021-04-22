@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="media_item_drm">#ff5722</color>
+  <color name="main_menu_background">#373737</color>
+  <color name="main_menu_list_divider">#00000000</color>
+  <color name="main_menu_category">#999999</color>
+  <color name="main_menu_item_pressed_background">#eeeeee</color>
+  <color name="main_menu_item_background">#ffffff</color>
+  <color name="main_menu_item_text">#000000</color>
+  <color name="main_menu_item_text_pressed">#259b24</color>
+  <color name="main_menu_selected_item_pressed_background">#eeeeee</color>
+  <color name="main_menu_selected_item_background">#eeeeee</color>
+  <color name="splash_background">#000000</color>
+  <color name="main_menu_item_pressed_focused">#80000000</color>
+  <color name="local_media_item_pressed_background">#3a88a4</color>
+  <color name="local_media_item_background">#ffffff</color>
+
+  <!-- THEME_DARK -->
+  <color name="main_menu_background_dark">#373737</color>
+  <color name="main_menu_category_dark">#999999</color>
+  <color name="main_menu_item_pressed_background_dark">#3a88a4</color>
+  <color name="main_menu_item_pressed_focused_dark">#3a88a4</color>
+  <color name="main_menu_item_background_dark">#373737</color>
+  <color name="main_menu_item_text_dark">#ffffff</color>
+  <color name="main_menu_item_text_pressed_dark">#ffffff</color>
+  <color name="main_menu_selected_item_pressed_background_dark">#3a88a4</color>
+  <color name="main_menu_selected_item_background_dark">#262626</color>
+  <color name="main_menu_title_background">#eeaaaaaa</color>
+  <color name="playlist_item_background">#ffffff</color>
+
+  <color name="colorPrimary">#259b24</color>
+  <color name="colorPrimaryDark">#2E7D32</color>
+
+  <color name="lighter_gray">#ddd</color>
+
+  <color name="ab_background">#80000000</color>
+  <color name="ab_text_title_shadow">#ff000000</color>
+
+  <color name="red">#ff5722</color>
+</resources>

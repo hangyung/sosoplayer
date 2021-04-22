@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item android:id="@+id/main_menu_add_storage"
+    android:title="@string/main_menu_add_storate"
+    android:icon="@drawable/outline_add_to_drive_black_24"
+    app:showAsAction="always"/>
+
+  <item android:id="@+id/main_menu_settings"
+    android:title="@string/main_menu_settings"
+    android:icon="@drawable/outline_settings_black_24"
+    app:showAsAction="never"/>
+</menu>

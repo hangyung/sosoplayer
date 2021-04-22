@@ -1,0 +1,109 @@
+// Copyright (C) 2016 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+apply from: '../constants.gradle'
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        versionName project.ext.releaseVersion
+        versionCode project.ext.releaseVersionCode
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.appTargetSdkVersion
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles = [
+                "proguard-rules.txt",
+                getDefaultProguardFile('proguard-android.txt')
+            ]
+        }
+        debug {
+            jniDebuggable = true
+        }
+    }
+
+    lintOptions {
+        // The demo app isn't indexed, doesn't have translations, and has a
+        // banner for AndroidTV that's only in xhdpi density.
+        disable 'GoogleAppIndexingWarning','MissingTranslation','IconDensities'
+    }
+
+    flavorDimensions "decoderExtensions"
+
+    productFlavors {
+        noDecoderExtensions {
+            dimension "decoderExtensions"
+            buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "false"
+        }
+        withDecoderExtensions {
+            dimension "decoderExtensions"
+            buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "true"
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
+    implementation 'androidx.annotation:annotation:' + androidxAnnotationVersion
+    implementation 'androidx.appcompat:appcompat:' + androidxAppCompatVersion
+    implementation 'androidx.multidex:multidex:' + androidxMultidexVersion
+    implementation 'com.google.android.material:material:1.2.1'
+
+    implementation  'com.google.android.exoplayer:exoplayer-core:' +releaseVersion
+    implementation  'com.google.android.exoplayer:exoplayer-dash:' +releaseVersion
+    implementation  'com.google.android.exoplayer:exoplayer-hls:' +releaseVersion
+    implementation  'com.google.android.exoplayer:exoplayer-smoothstreaming:' +releaseVersion
+    implementation  'com.google.android.exoplayer:exoplayer-ui:' +releaseVersion
+
+    implementation project(modulePrefix + 'extension-extrastream')
+    implementation project(modulePrefix + 'extension-ffmpeg2')
+    implementation project(modulePrefix + 'extension-soso')
+    implementation project(modulePrefix + 'extension-plex')
+
+    implementation  'com.google.android.exoplayer:extension-ima:' +releaseVersion
+    implementation  'com.google.android.exoplayer:extension-cronet:' +releaseVersion
+    implementation  'com.google.android.exoplayer:extension-rtmp:' +releaseVersion
+    withDecoderExtensionsImplementation  'com.google.android.exoplayer:extension-av1:' +releaseVersion
+    withDecoderExtensionsImplementation  'com.google.android.exoplayer:extension-flac:' +releaseVersion
+    withDecoderExtensionsImplementation  'com.google.android.exoplayer:extension-opus:' +releaseVersion
+    withDecoderExtensionsImplementation  'com.google.android.exoplayer:extension-vp9:' +releaseVersion
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.github.thegrizzlylabs:sardine-android:v0.8'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.preference:preference:1.1.0"
+    implementation ('com.squareup.retrofit2:converter-simplexml:2.1.0'){
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+
+}
+
+apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'

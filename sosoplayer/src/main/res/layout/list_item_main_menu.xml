@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector_background_default_light" >
+
+    <!-- menu_category -->
+
+    <LinearLayout
+        android:id="@+id/main_menu_category_lLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:id="@+id/main_menu_category_line_view"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/main_menu_category" />
+
+        <TextView
+            android:id="@+id/main_menu_category_name_tView"
+            android:layout_width="match_parent"
+            android:layout_height="37dip"
+            android:layout_marginLeft="16dip"
+            android:gravity="center_vertical"
+            android:textColor="@color/main_menu_category"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- menu_item -->
+
+    <RelativeLayout
+        android:id="@+id/main_menu_item_rLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dip" >
+
+        <ImageView
+            android:id="@+id/main_menu_item_icon_iView"
+            android:layout_width="24dip"
+            android:layout_height="24dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="32dip"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/main_menu_item_title_tView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dip"
+            android:layout_toRightOf="@+id/main_menu_item_icon_iView"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@drawable/main_menu_item_text"
+            android:textSize="16sp" />
+
+        <View
+          android:id="@+id/main_menu_item_selected_view"
+          android:layout_width="7dip"
+          android:layout_height="match_parent"
+          android:layout_alignParentLeft="true"
+          android:background="#00cc00"
+          android:visibility="gone" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

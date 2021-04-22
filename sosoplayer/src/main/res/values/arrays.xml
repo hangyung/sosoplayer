@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="extension_movie">
+    <item>wmv</item>
+    <item>asf</item>
+    <item>mp4</item>
+    <item>asx</item>
+    <item>avi</item>
+    <item>mkv</item>
+    <item>f4v</item>
+    <item>flv</item>
+    <item>m4v</item>
+    <item>mov</item>
+    <item>mpeg</item>
+    <item>mpg</item>
+    <item>rm</item>
+    <item>rmvb</item>
+    <item>tp</item>
+    <item>ts</item>
+    <item>mts</item>
+    <item>m2ts</item>
+    <item>gt</item>
+    <item>3gp</item>
+    <item>3g2</item>
+    <item>3gpp</item>
+    <item>3gp2</item>
+    <item>wtv</item>
+    <item>divx</item>
+    <item>webm</item>
+  </string-array>
+  <string-array name="extension_audio">
+    <item>aac</item>
+    <item>ac3</item>
+    <item>aif</item>
+    <item>amr</item>
+    <item>au</item>
+    <item>flac</item>
+    <item>m4a</item>
+    <item>mp2</item>
+    <item>mp3</item>
+    <item>ogg</item>
+    <item>ra</item>
+    <item>vqf</item>
+    <item>wav</item>
+    <item>wma</item>
+  </string-array>
+  <string-array name="extension_subtitle">
+    <item>smi</item>
+    <item>srt</item>
+    <item>ass</item>
+  </string-array>
+</resources>

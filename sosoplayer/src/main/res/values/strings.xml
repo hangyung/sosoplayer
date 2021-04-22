@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+  <string name="application_name">SosoPlayer</string>
+
+  <string name="track_selection_title">Select tracks</string>
+
+  <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
+
+  <string name="error_cleartext_not_permitted">Cleartext HTTP traffic not permitted. See https://exoplayer.dev/issues/cleartext-not-permitted</string>
+
+  <string name="error_generic">Playback failed</string>
+
+  <string name="error_drm_unsupported_before_api_18">DRM content not supported on API levels below 18</string>
+
+  <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+
+  <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+
+  <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+
+  <string name="error_querying_decoders">Unable to query device decoders</string>
+
+  <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
+
+  <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+
+  <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+
+  <string name="storage_permission_denied">Permission to access storage was denied</string>
+
+  <string name="sample_list_load_error">One or more sample lists failed to load</string>
+
+
+  <string name="dialog_string_cannot_permit">Permission acquisition failed</string>
+  <string name="dialog_string_cannot_permit_play_movie">Permissions are required to play the local contents</string>
+  <string name="dialog_string_setting">Setting</string>
+
+  <string name="drawer_open">Open navigation drawer</string>
+  <string name="drawer_close">Close navigation drawer</string>
+  <string name="no_media">Media Not Found</string>
+  <string name="main_menu_add_storate">Add Storage</string>
+  <string name="main_menu_settings">Settings</string>
+  <string name="ok">OK</string>
+  <string name="cancel">cancel</string>
+  <string name="typing_text">Typing</string>
+  <string name="error_cannot_access">"Error, Can not be accessed."</string>
+  <string name="storage_edit">Edit Storage</string>
+  <string name="storage_remove">Remove Storage</string>
+  <string name="confirm_exit">Confirm Exit</string>
+  <string name="confirm_exit_message">Are you sure you want to exit</string>
+  <string name="confirm_remove">Confirm Remove</string>
+  <string name="confirm_remove_message">Are you sure you want to remove storage</string>
+</resources>

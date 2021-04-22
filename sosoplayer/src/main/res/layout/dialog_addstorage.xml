@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <LinearLayout
+    android:id="@+id/storagetype_linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    android:orientation="horizontal"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:weightSum="4">
+    <TextView
+      android:id="@+id/storagetype_textview"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:text="type : "
+      android:layout_weight="1"/>
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/storagetype_spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintLeft_toLeftOf="@+id/storagetype_textview"
+      android:layout_weight="3"/>
+  </LinearLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/edittext_storage_name_inputLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:hint="Name">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/edittext_storage_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:imeOptions="actionNext" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <androidx.appcompat.widget.AppCompatButton
+    android:id="@+id/storage_search_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="12sp"
+    android:text="Search Folder"/>
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/edittext_storage_uri_inputLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:hint="Uri"
+    android:layout_marginRight="8dp">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/edittext_storage_uri"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:imeOptions="actionNext"
+      android:inputType="textUri" />
+  </com.google.android.material.textfield.TextInputLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/edittext_storage_plextoken_inputLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Plex Token"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/edittext_storage_plextoken"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:imeOptions="actionNext"
+      android:inputType="textUri" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <LinearLayout
+    android:id="@+id/ftp_option_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:weightSum="2">
+
+    <CheckBox
+      android:id="@+id/isActiveMode"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:checked="true"
+      android:layout_weight="1"
+      android:layout_gravity="center_vertical"
+      android:text="active" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/edittext_storage_port_inputLayout"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:hint="port"
+      android:layout_weight="1">
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edittext_storage_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/user_option_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="12dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:weightSum="2">
+      <CheckBox
+        android:id="@+id/anonymouscheckbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_weight="1"
+        android:text=" anonymous" />
+
+      <CheckBox
+        android:id="@+id/hidepasswdcheckbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_weight="1"
+        android:text="show passwd" />
+
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/edittext_storage_userid_inputLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="UserId"
+      android:layout_marginTop="12dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp">
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edittext_storage_userid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/edittext_storage_passwd_inputLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:hint="Passwd">
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edittext_storage_passwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/encoding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    android:orientation="horizontal"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:weightSum="4">
+    <TextView
+      android:id="@+id/encoding_textview"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:text="Encoding : "
+      android:layout_weight="1"/>
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/encoding_spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintLeft_toLeftOf="@+id/encoding_textview"
+      android:layout_weight="3"/>
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="12dp"
+    android:orientation="horizontal">
+    <androidx.appcompat.widget.AppCompatButton
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:layout_gravity="center_horizontal"
+      android:text="@string/cancel"
+      android:id="@+id/storage_cancel_button"/>
+    <androidx.appcompat.widget.AppCompatButton
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:layout_gravity="center_horizontal"
+      android:text="@string/ok"
+      android:id="@+id/storage_ok_button"/>
+  </LinearLayout>
+</LinearLayout>
