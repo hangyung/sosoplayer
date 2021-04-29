@@ -73,7 +73,7 @@ public class FfmpegDemuxer implements SeekMap {
 
   private Map<Integer, FfmpegTrack> trackMap;
 
-  public void init( Uri uri, DataSource dataSource, ExtractorOutput output) throws IOException {
+  public boolean init( Uri uri, DataSource dataSource, ExtractorOutput output) throws IOException {
     if(!extractorInitialized) {
       if (!FfmpegLibrary.isAvailable()) {
         throw new IOException("Failed to load decoder native libraries.");
@@ -215,6 +215,7 @@ public class FfmpegDemuxer implements SeekMap {
 
       extractorInitialized = true;
     }
+    return extractorInitialized;
   }
 
 

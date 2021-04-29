@@ -994,7 +994,11 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
       int result = Extractor.RESULT_CONTINUE;
       try {
 
-        ffmpegDemuxer.init(uri , dataSource, extractorOutput);
+        while (!loadCanceled) {
+          if (ffmpegDemuxer.init(uri, dataSource, extractorOutput)) {
+            break;
+          }
+        }
 
         if (pendingExtractorSeek) {
           ffmpegDemuxer.seek(seekTimeUs);
@@ -1002,7 +1006,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
         }
         int packetCount = 0;
         long startTime = System.currentTimeMillis();
-
+        int eosCount = 0;
         while (result == Extractor.RESULT_CONTINUE && !loadCanceled) {
           try {
              loadCondition.block();
@@ -1010,14 +1014,22 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
               throw new InterruptedIOException();
             }
             result = ffmpegDemuxer.read();
-            packetCount++;
-
-            if ( packetCount > 100 ) {
+            if (packetCount > 100 ) {
               loadCondition.close();
               handler.post(onContinueLoadingRequestedRunnable);
             }
-          }
 
+            if (result != Extractor.RESULT_CONTINUE ) {
+              eosCount++;
+              result = Extractor.RESULT_CONTINUE;
+            } else {
+              packetCount++;
+            }
+
+            if (eosCount > 10) {
+              break;
+            }
+          }
         } finally {
 
         }
