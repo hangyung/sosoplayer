@@ -20,6 +20,8 @@ import static java.lang.Math.min;
 
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
@@ -548,6 +550,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
   @Override
   public void onLoadCompleted(
       ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
+    Log.e("XXX", "onLoadCompleted");
     if (durationUs == C.TIME_UNSET && seekMap != null) {
       boolean isSeekable = seekMap.isSeekable();
       long largestQueuedTimestampUs = getLargestQueuedTimestampUs();
@@ -1000,37 +1003,23 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
         int packetCount = 0;
         long startTime = System.currentTimeMillis();
 
-
-        while (!loadCanceled) {
+        while (result == Extractor.RESULT_CONTINUE && !loadCanceled) {
           try {
-            loadCondition.block();
-          } catch (InterruptedException e) {
-            throw new InterruptedIOException();
-          }
-          result = ffmpegDemuxer.read();
-          packetCount++;
-          if (packetCount > 100  || result == Extractor.RESULT_END_OF_INPUT) {
-            loadCondition.close();
-            handler.post(onContinueLoadingRequestedRunnable);
-          }
-        }
+             loadCondition.block();
+            } catch (InterruptedException e) {
+              throw new InterruptedIOException();
+            }
+            result = ffmpegDemuxer.read();
+            packetCount++;
 
+            if ( packetCount > 100 ) {
+              loadCondition.close();
+              handler.post(onContinueLoadingRequestedRunnable);
+            }
+          }
 
-//            result = progressiveMediaExtractor.read(positionHolder);
-//            long currentInputPosition = progressiveMediaExtractor.getCurrentInputPosition();
-//            if (currentInputPosition > position + continueLoadingCheckIntervalBytes) {
-//              position = currentInputPosition;
-//              loadCondition.close();
-//              handler.post(onContinueLoadingRequestedRunnable);
-//            }
-//          }
         } finally {
-//          if (result == Extractor.RESULT_SEEK) {
-//            result = Extractor.RESULT_CONTINUE;
-//          } else if (progressiveMediaExtractor.getCurrentInputPosition() != C.POSITION_UNSET) {
-//            positionHolder.position = progressiveMediaExtractor.getCurrentInputPosition();
-//          }
-//          Util.closeQuietly(dataSource);
+
         }
 
     }

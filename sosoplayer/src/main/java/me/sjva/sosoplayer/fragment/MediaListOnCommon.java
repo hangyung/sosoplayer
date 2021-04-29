@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,9 +58,9 @@ import me.sjva.sosoplayer.widget.StorageManagerDialog;
 import com.google.android.exoplayer2.ext.plex.Directory;
 import me.sjva.sosoplayer.activity.OnMainEventListener;
 
-    public class MediaListOnFragment extends Fragment implements OnFragmentEventListener,
-    MediaStoreParentAdapter.MediaStoreParentEventLister, Toolbar.OnMenuItemClickListener,
-    OnItemSelectListener,  ExtraPlexStorageInfo.OnPlexLoadEventListener {
+    public class MediaListOnListSelect extends Fragment implements OnListSelectEventListener,
+     Toolbar.OnMenuItemClickListener,
+            ExtraPlexStorageInfo.OnPlexLoadEventListener {
   private static final String TAG = "MediaListFragment";
   private static final  int MSG_LOADING_START = 0;
   private static final  int MSG_LOADING_END = 1;
@@ -76,10 +75,10 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
 
   private OnMainEventListener onMainEventListener;
 
-  public MediaListOnFragment(StorageInfo storageInfo, OnMainEventListener onMainEventListener) {
-    this.storageInfo = storageInfo;
+  public MediaListOnListSelect(StorageInfo storageInfo, OnMainEventListener onMainEventListener) {
     rootDir = storageInfo.getPath();
     subDir = null;
+    this.storageInfo = storageInfo;
     this.onMainEventListener = onMainEventListener;
   }
 
@@ -186,7 +185,6 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
 
   @Override
   public void onItemSelect(Video video) {
-    onLoadingStart();
     if (getActivity() != null && getActivity() instanceof MainActivity) {
       PlexUtil.startPlayer((MainActivity)getActivity(),storageInfo, video, this);
     }
@@ -216,7 +214,6 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   @Override
   public void onLoadingStart() {
     handler.sendEmptyMessage(MSG_LOADING_START);
-
   }
 
   @Override
@@ -501,7 +498,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   }
 
   @Override
-  public void onItemSelect(String name, ArrayList<FileInfo> fileInfos) {
+  public void onItemSelect(String name) {
     storageInfo.setBucketFilter(name);
     setAdapter();
   }
@@ -832,10 +829,17 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
         new StorageManagerDialog(getActivity(), onMainEventListener).show();
         break;
       case R.id.main_menu_settings:
+        startSettingActivity();
         break;
     }
     return super.onOptionsItemSelected(item);
   }
 
+  private void startSettingActivity() {
+    if (getActivity() != null && getActivity() instanceof MainActivity) {
+      MainActivity mainActivity = (MainActivity)getActivity();
+      mainActivity.startSettingActivity();
+    }
+  }
 
 }
