@@ -6,8 +6,10 @@ import com.google.android.exoplayer2.MediaItem;
 import java.util.ArrayList;
 import java.util.List;
 import me.sjva.sosoplayer.activity.MainActivity;
+import me.sjva.sosoplayer.activity.OnPlayerEventListener;
+import me.sjva.sosoplayer.data.FileInfo;
 import me.sjva.sosoplayer.data.StorageInfo;
-import me.sjva.sosoplayer.fragment.OnFragmentEventListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 import com.google.android.exoplayer2.ext.plex.Media;
 import com.google.android.exoplayer2.ext.plex.MediaContainer;
 import com.google.android.exoplayer2.ext.plex.Part;
@@ -43,7 +45,11 @@ public class PlexUtil {
     return false;
   }
 
-  public static void startPlayer(MainActivity activity, StorageInfo storageInfo, Video video, OnFragmentEventListener onFragmentEventListener) {
+  public static String getCurrentMediaKey(StorageInfo storageInfo, Video video) {
+    return String.format("plex://%s/%s", storageInfo.getName() , video.getKey());
+  }
+
+  public static void startPlayer(StorageInfo storageInfo, Video video, OnPlayerEventListener onPlayerEventListener) {
         String basePath = storageInfo.getPath();
         String token = storageInfo.getToken();
         PlexApi.getMetadata(basePath, token, video.getKey(),
@@ -91,12 +97,13 @@ public class PlexUtil {
               }
             }
 
-            activity.startPlayer( mediaItems);
+            onPlayerEventListener.onStartPlayer( mediaItems);
+          //  activity.startPlayer( mediaItems);
           }
 
           @Override
           public void onFailure(Call<MediaContainer> call, Throwable t) {
-            onFragmentEventListener.onError(t);
+            onPlayerEventListener.onPlexError(t);
           }
         });
   }

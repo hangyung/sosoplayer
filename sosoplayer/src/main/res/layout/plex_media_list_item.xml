@@ -34,18 +34,12 @@
         android:text="00:00"
         android:textColor="@android:color/white"
         android:textSize="11sp" />
-      <TextView
-        android:id="@+id/subtilte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:gravity="center"
-        android:maxLines="1"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:text="subtitle"
-        android:textColor="@color/red"
-        android:textSize="11sp" />
+      <View
+          android:layout_gravity="bottom"
+          android:id="@+id/progress"
+          android:layout_width="96dp"
+          android:layout_height="3dp"
+          android:background="@drawable/bkgd_level"/>
     </FrameLayout>
 
     <LinearLayout

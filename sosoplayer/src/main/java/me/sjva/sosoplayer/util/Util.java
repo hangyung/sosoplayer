@@ -8,9 +8,16 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
+import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import java.util.List;
@@ -196,5 +203,35 @@ public class Util {
 
     }
     return subtitleList;
+  }
+
+  public static  Pair<Integer, String> getErrorMessage(Context context, @NonNull ExoPlaybackException e) {
+    String errorString = context.getString(R.string.error_generic);
+    if (e.type == ExoPlaybackException.TYPE_RENDERER) {
+      Exception cause = e.getRendererException();
+      if (cause instanceof MediaCodecRenderer.DecoderInitializationException) {
+        // Special case for decoder initialization failures.
+        MediaCodecRenderer.DecoderInitializationException decoderInitializationException =
+                (MediaCodecRenderer.DecoderInitializationException) cause;
+        if (decoderInitializationException.codecInfo == null) {
+          if (decoderInitializationException.getCause() instanceof MediaCodecUtil.DecoderQueryException) {
+            errorString = context.getString(R.string.error_querying_decoders);
+          } else if (decoderInitializationException.secureDecoderRequired) {
+            errorString =
+                    context.getString(
+                            R.string.error_no_secure_decoder, decoderInitializationException.mimeType);
+          } else {
+            errorString =
+                    context.getString(R.string.error_no_decoder, decoderInitializationException.mimeType);
+          }
+        } else {
+          errorString =
+                  context.getString(
+                          R.string.error_instantiating_decoder,
+                          decoderInitializationException.codecInfo.name);
+        }
+      }
+    }
+    return Pair.create(0, errorString);
   }
 }

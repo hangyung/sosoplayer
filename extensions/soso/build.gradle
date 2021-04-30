@@ -14,10 +14,19 @@
 apply from: "$gradle.ext.exoplayerSettingsDir/common_library_config.gradle"
 
 dependencies {
+    implementation "androidx.preference:preference:1.1.0"
+    implementation 'androidx.appcompat:appcompat:' + androidxAppCompatVersion
+    implementation  'com.google.android.exoplayer:exoplayer-core:' +releaseVersion
+    implementation  'com.google.android.exoplayer:exoplayer-common:' +releaseVersion
+//    implementation project(modulePrefix + 'library-core')
+//    implementation project(modulePrefix + 'library-common')
+    implementation 'androidx.media:media:' + androidxMediaVersion
+
+    implementation 'androidx.recyclerview:recyclerview:' + androidxRecyclerViewVersion
 
     implementation 'androidx.annotation:annotation:' + androidxAnnotationVersion
-    implementation  'com.google.android.exoplayer:exoplayer-common:' +releaseVersion
-    implementation  'com.google.android.exoplayer:exoplayer-core:' +releaseVersion
+
+
     implementation project(path: ':extension-extrastream')
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     compileOnly 'org.jetbrains.kotlin:kotlin-annotations-jvm:' + kotlinAnnotationsVersion

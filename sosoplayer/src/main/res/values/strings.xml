@@ -44,6 +44,7 @@
   <string name="storage_permission_denied">Permission to access storage was denied</string>
 
   <string name="sample_list_load_error">One or more sample lists failed to load</string>
+  <string name="error_plex">Plex Server Error</string>
 
 
   <string name="dialog_string_cannot_permit">Permission acquisition failed</string>
@@ -65,4 +66,29 @@
   <string name="confirm_exit_message">Are you sure you want to exit</string>
   <string name="confirm_remove">Confirm Remove</string>
   <string name="confirm_remove_message">Are you sure you want to remove storage</string>
+  <string name="error_title">Error</string>
+  <string name="playback_complete">Playback complete</string>
+  <string name="soso_settings_category_player">Player Settings</string>
+  <string name="soso_settings_title_player_continuation">Play from</string>
+  <string name="soso_settings_summary_player_continuation">Play from the last paused position</string>
+  <string name="soso_settings_title_nextfile_auto_playback">Auto Playback</string>
+  <string name="soso_settings_summary_nextfile_auto_playback">if playback complte, Next File Auto Playback</string>
+  <string name="soso_settings_title_use_ffmpeg_progress">Use FFmpeg</string>
+  <string name="soso_settings_summary_use_ffmpeg_progress">Default content use ffmpeg Extractor</string>
+  <string name="soso_settings_title_keep_last_playbackspeed">Playback Speed</string>
+  <string name="soso_settings_summary_keep_last_playbackspeed">Keep Last Playback Speed</string>
+  <string name="soso_settings_category_subtitle">Subtitle Settings</string>
+  <string name="soso_settings_title_subtitle_foregroundcolor">Subtitle Text Color</string>
+  <string name="soso_settings_summary_subtitle_foregroundcolor">Select Subtitle Text Color</string>
+  <string name="soso_settings_title_subtitle_backgroundcolor">Subtitle BG Color</string>
+  <string name="soso_settings_summary_subtitle_backgroundcolor">Select Subtitle BG Color</string>
+  <string name="soso_settings_title_subtitle_windowcolor">Subtitle Window Color</string>
+  <string name="soso_settings_summary_subtitle_windowcolor">Select Subtitle Window Color</string>
+  <string name="soso_settings_title_subtitle_edgetype">Subtitle Edge Type</string>
+  <string name="soso_settings_summary_subtitle_edgetype">Select Subtitle Edge Type</string>
+  <string name="soso_settings_title_subtitle_edgecolor">Subtitle Edge Color</string>
+  <string name="soso_settings_summary_subtitle_edgecolor">Subtitle Edge Color</string>
+
+  <string name="soso_settings_category_info">Info</string>
+  <string name="soso_settings_category_info_license">Open Source License</string>
 </resources>

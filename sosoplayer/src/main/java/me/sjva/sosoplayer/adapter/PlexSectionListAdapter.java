@@ -13,18 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
 import me.sjva.sosoplayer.R;
-import me.sjva.sosoplayer.fragment.OnFragmentEventListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 import com.google.android.exoplayer2.ext.plex.Directory;
 
 public class PlexSectionListAdapter extends RecyclerView.Adapter<PlexSectionListAdapter.ViewHolder> {
 
   private Context mContext;
   private final List<Directory> mDirectories;
-  private OnFragmentEventListener mOnFragmentEventListener;
-  public PlexSectionListAdapter(Context context, List<Directory> directories, OnFragmentEventListener listener) {
+  private OnCommonEventListener mOnCommonEventListener;
+  public PlexSectionListAdapter(Context context, List<Directory> directories, OnCommonEventListener listener) {
     mContext = context;
     mDirectories = directories;
-    mOnFragmentEventListener = listener;
+    mOnCommonEventListener = listener;
   }
 
   @NonNull
@@ -101,7 +101,7 @@ public class PlexSectionListAdapter extends RecyclerView.Adapter<PlexSectionList
             return;
           }
           Directory directory = mDirectories.get(pos);
-          mOnFragmentEventListener.onSectionSelect(directory);
+          mOnCommonEventListener.onSectionSelect(directory);
         }
       });
 

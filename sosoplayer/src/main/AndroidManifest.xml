@@ -30,6 +30,7 @@
   <uses-sdk/>
 
   <application
+      android:networkSecurityConfig="@xml/network_security_config"
       android:usesCleartextTraffic="true"
       android:label="@string/application_name"
       android:icon="@mipmap/logo"
@@ -54,7 +55,15 @@
       android:name=".activity.MainActivity"
       android:configChanges="keyboardHidden|orientation"
       android:exported="true"
+      android:screenOrientation="portrait"
       android:theme="@style/AppTheme" >
+    </activity>
+    <activity
+        android:name=".activity.SettingsActivity"
+        android:configChanges="keyboardHidden|orientation"
+        android:exported="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme" >
     </activity>
 
     <activity android:name=".activity.PlayerActivity"

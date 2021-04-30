@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.ext.extrastream.SambaFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import me.sjva.sosoplayer.activity.MainActivity;
@@ -58,7 +59,7 @@ import me.sjva.sosoplayer.widget.StorageManagerDialog;
 import com.google.android.exoplayer2.ext.plex.Directory;
 import me.sjva.sosoplayer.activity.OnMainEventListener;
 
-    public class MediaListOnListSelect extends Fragment implements OnListSelectEventListener,
+    public class MediaListOnCommon extends Fragment implements OnCommonEventListener,
      Toolbar.OnMenuItemClickListener,
             ExtraPlexStorageInfo.OnPlexLoadEventListener {
   private static final String TAG = "MediaListFragment";
@@ -75,7 +76,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
 
   private OnMainEventListener onMainEventListener;
 
-  public MediaListOnListSelect(StorageInfo storageInfo, OnMainEventListener onMainEventListener) {
+  public MediaListOnCommon(StorageInfo storageInfo, OnMainEventListener onMainEventListener) {
     rootDir = storageInfo.getPath();
     subDir = null;
     this.storageInfo = storageInfo;
@@ -176,23 +177,26 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   }
 
 
-  private void startPlayer(FileInfo fileInfo) {
+  private void startPlayer(ArrayList<FileInfo> fileInfos, int postion) {
     if (getActivity() != null && getActivity() instanceof MainActivity) {
       final MainActivity activity = (MainActivity) getActivity();
-      activity.startPlayer(fileInfo.getMediaItems(storageInfo));
+      activity.startPlayer(fileInfos, postion);
+//      activity.startPlayer(fileInfo.getMediaItems(storageInfo));
     }
   }
 
   @Override
-  public void onItemSelect(Video video) {
+  public void onPlexItemSelect(ArrayList<Video> videos,  int postion) {
     if (getActivity() != null && getActivity() instanceof MainActivity) {
-      PlexUtil.startPlayer((MainActivity)getActivity(),storageInfo, video, this);
+      final MainActivity activity = (MainActivity) getActivity();
+      activity.startPlexPlayer(videos, postion);
+    //  PlexUtil.startPlayer((MainActivity)getActivity(),storageInfo, video, this);
     }
   }
 
 
   @Override
-  public void onItemLongSelect(Video video) {
+  public void onPlexItemLongSelect(ArrayList<Video> videos,  int postion) {
     // TODO:
   }
 
@@ -479,7 +483,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
     return true;
   }
 
-  private void updateView() {
+  public void updateView() {
     ViewUpdateAsyncTask asyncTask = new ViewUpdateAsyncTask();
     asyncTask.execute();
   }
@@ -504,10 +508,11 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   }
 
   @Override
-  public void onItemSelect(FileInfo fileInfo) {
+  public void onItemSelect(ArrayList<FileInfo> fileInfos, int postion) {
+    FileInfo fileInfo = fileInfos.get(postion);
     switch (storageInfo.getStorageType()){
       case MediaStore:
-        startPlayer(fileInfo);
+        startPlayer(fileInfos, postion);
         break;
       case Mount: {
           if (fileInfo.isDirectory()) {
@@ -516,7 +521,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
             subDir = childDir.getPath();
             updateView();
           } else {
-            startPlayer(fileInfo);
+            startPlayer(fileInfos, postion);
           }
         }
         break;
@@ -525,7 +530,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
             subDir = fileInfo.getPath();
             updateView();
           } else {
-            startPlayer(fileInfo);
+            startPlayer(fileInfos, postion);
           }
         }
         break;
@@ -536,7 +541,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
             subDir = childDir.getPath();
             updateView();
           } else {
-            startPlayer(fileInfo);
+            startPlayer(fileInfos, postion);
           }
         }
         break;
@@ -545,7 +550,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
             subDir = fileInfo.getPath();
             updateView();
           } else {
-            startPlayer(fileInfo);
+            startPlayer(fileInfos, postion);
           }
         }
         break;
@@ -555,7 +560,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   }
 
   @Override
-  public void onItemLongSelect(FileInfo fileInfo) {
+  public void onItemLongSelect(ArrayList<FileInfo> fileInfos, int postion) {
     // TODO:
   }
 
@@ -600,7 +605,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
 
   @Override
   public void onContentsDetailsLoaded(MediaContainer detailsMediaContainer) {
-    RecyclerView.Adapter  adapter = new PlexShowDetailsListAdapter(getActivity(), storageInfo.getPath(), storageInfo.getToken(),
+    RecyclerView.Adapter  adapter = new PlexShowDetailsListAdapter(getActivity(), storageInfo,  storageInfo.getPath(), storageInfo.getToken(),
         detailsMediaContainer.getDirectory(), this);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
     recyclerView.setLayoutManager(linearLayoutManager);
@@ -732,7 +737,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
       recyclerView.setLayoutManager(gridLayoutManager);
       recyclerView.setAdapter(adapter);
     } else {
-      MediaStoreChildAdapter adapter = new MediaStoreChildAdapter(getActivity(), storageInfo.getBucketList(), this);
+      MediaStoreChildAdapter adapter = new MediaStoreChildAdapter(getActivity(), storageInfo, storageInfo.getBucketList(), this);
       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
       linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
       recyclerView.setLayoutManager(linearLayoutManager);
@@ -741,7 +746,7 @@ import me.sjva.sosoplayer.activity.OnMainEventListener;
   }
 
   private void setDefaultAdater() {
-    MediaDefaultAdapter adapter = new MediaDefaultAdapter(getActivity(), storageInfo.getFileInfos(), this);
+    MediaDefaultAdapter adapter = new MediaDefaultAdapter(getActivity(), storageInfo,  storageInfo.getFileInfos(), this);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     recyclerView.setLayoutManager(linearLayoutManager);

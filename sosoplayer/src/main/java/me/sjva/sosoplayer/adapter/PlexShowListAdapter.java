@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import me.sjva.sosoplayer.R;
 import java.util.List;
 import me.sjva.sosoplayer.util.Util;
-import me.sjva.sosoplayer.fragment.OnFragmentEventListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 import com.google.android.exoplayer2.ext.plex.Directory;
 import com.google.android.exoplayer2.ext.plex.PlexApi;
 
@@ -20,16 +20,16 @@ public class PlexShowListAdapter extends RecyclerView.Adapter<PlexShowListAdapte
 
   private Context mContext;
   private final List<Directory> mDirectories;
-  private OnFragmentEventListener mOnFragmentEventListener;
+  private OnCommonEventListener mOnCommonEventListener;
   private final String path;
   private final String token;
   public PlexShowListAdapter(Context context, String path, String token,
-      List<Directory> directories, OnFragmentEventListener listener) {
+      List<Directory> directories, OnCommonEventListener listener) {
     mContext = context;
     this.path = path;
     this.token = token;
     mDirectories = directories;
-    mOnFragmentEventListener = listener;
+    mOnCommonEventListener = listener;
   }
 
   @NonNull
@@ -91,7 +91,7 @@ public class PlexShowListAdapter extends RecyclerView.Adapter<PlexShowListAdapte
           if (position == RecyclerView.NO_POSITION)
             return;
           Directory directory = mDirectories.get(position);
-          mOnFragmentEventListener.onContentSelect(directory);
+          mOnCommonEventListener.onContentSelect(directory);
         }
       });
 

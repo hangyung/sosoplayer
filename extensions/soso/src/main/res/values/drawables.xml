@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+  <drawable name="soso_controls_play">@drawable/soso_icon_play</drawable>
+  <drawable name="soso_controls_pause">@drawable/soso_icon_pause</drawable>
+  <drawable name="soso_controls_next">@drawable/soso_icon_next</drawable>
+  <drawable name="soso_controls_previous">@drawable/soso_icon_previous</drawable>
+  <drawable name="soso_controls_fastforward">@drawable/soso_icon_fastforward</drawable>
+  <drawable name="soso_controls_rewind">@drawable/soso_icon_rewind</drawable>
+  <drawable name="soso_controls_repeat_all">@drawable/soso_icon_repeat_all</drawable>
+  <drawable name="soso_controls_repeat_off">@drawable/soso_icon_repeat_off</drawable>
+  <drawable name="soso_controls_repeat_one">@drawable/soso_icon_repeat_one</drawable>
+  <drawable name="soso_controls_shuffle_off">@drawable/soso_icon_shuffle_off</drawable>
+  <drawable name="soso_controls_shuffle_on">@drawable/soso_icon_shuffle_on</drawable>
+  <drawable name="soso_controls_fullscreen_enter">@drawable/soso_icon_fullscreen_enter</drawable>
+  <drawable name="soso_controls_fullscreen_exit">@drawable/soso_icon_fullscreen_exit</drawable>
+  <drawable name="soso_controls_vr">@drawable/soso_icon_vr</drawable>
+  <drawable name="soso_notification_play">@drawable/soso_icon_play</drawable>
+  <drawable name="soso_notification_pause">@drawable/soso_icon_pause</drawable>
+  <drawable name="soso_notification_next">@drawable/soso_icon_next</drawable>
+  <drawable name="soso_notification_previous">@drawable/soso_icon_previous</drawable>
+  <drawable name="soso_notification_fastforward">@drawable/soso_icon_fastforward</drawable>
+  <drawable name="soso_notification_rewind">@drawable/soso_icon_rewind</drawable>
+  <drawable name="soso_notification_stop">@drawable/soso_icon_stop</drawable>
+  <drawable name="soso_notification_small_icon">@drawable/soso_icon_circular_play</drawable>
+
+  <drawable name="soso_styled_controls_play">@drawable/soso_ic_play_circle_filled</drawable>
+  <drawable name="soso_styled_controls_pause">@drawable/soso_ic_pause_circle_filled</drawable>
+  <drawable name="soso_styled_controls_next">@drawable/soso_ic_skip_next</drawable>
+  <drawable name="soso_styled_controls_previous">@drawable/soso_ic_skip_previous</drawable>
+  <drawable name="soso_styled_controls_fastforward">@drawable/soso_ic_forward</drawable>
+  <drawable name="soso_styled_controls_rewind">@drawable/soso_ic_rewind</drawable>
+  <drawable name="soso_styled_controls_repeat_all">@drawable/soso_icon_repeat_all</drawable>
+  <drawable name="soso_styled_controls_repeat_off">@drawable/soso_icon_repeat_off</drawable>
+  <drawable name="soso_styled_controls_repeat_one">@drawable/soso_icon_repeat_one</drawable>
+  <drawable name="soso_styled_controls_shuffle_off">@drawable/soso_icon_shuffle_off</drawable>
+  <drawable name="soso_styled_controls_shuffle_on">@drawable/soso_icon_shuffle_on</drawable>
+  <drawable name="soso_styled_controls_fullscreen_enter">@drawable/soso_ic_fullscreen_enter</drawable>
+  <drawable name="soso_styled_controls_fullscreen_exit">@drawable/soso_ic_fullscreen_exit</drawable>
+  <drawable name="soso_styled_controls_vr">@drawable/soso_icon_vr</drawable>
+  <drawable name="soso_styled_controls_subtitle_off">@drawable/soso_ic_subtitle_off</drawable>
+  <drawable name="soso_styled_controls_subtitle_on">@drawable/soso_ic_subtitle_on</drawable>
+  <drawable name="soso_styled_controls_overflow_show">@drawable/soso_ic_chevron_right</drawable>
+  <drawable name="soso_styled_controls_overflow_hide">@drawable/soso_ic_chevron_left</drawable>
+  <drawable name="soso_styled_controls_settings">@drawable/soso_ic_settings</drawable>
+  <drawable name="soso_styled_controls_check">@drawable/soso_ic_check</drawable>
+  <drawable name="soso_styled_controls_audiotrack">@drawable/soso_ic_audiotrack</drawable>
+  <drawable name="soso_styled_controls_speed">@drawable/soso_ic_speed</drawable>
+</resources>

@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import me.sjva.sosoplayer.R;
+
+import java.util.ArrayList;
 import java.util.List;
 import me.sjva.sosoplayer.util.Util;
-import me.sjva.sosoplayer.fragment.OnFragmentEventListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 import com.google.android.exoplayer2.ext.plex.PlexApi;
 import com.google.android.exoplayer2.ext.plex.Video;
 
@@ -21,14 +23,14 @@ public class PlexMovieListAdapter extends RecyclerView.Adapter<PlexMovieListAdap
   private Context mContext;
   private final String path;
   private final String token;
-  private List<Video> mVideo;
-  private OnFragmentEventListener mOnFragmentEventListener;
-  public PlexMovieListAdapter(Context context,  String path , String token, List<Video> videos, OnFragmentEventListener listener) {
+  private ArrayList<Video> mVideo;
+  private OnCommonEventListener mOnCommonEventListener;
+  public PlexMovieListAdapter(Context context, String path , String token, ArrayList<Video> videos, OnCommonEventListener listener) {
     mContext = context;
     this.path = path;
     this.token = token;
     mVideo = videos;
-    mOnFragmentEventListener = listener;
+    mOnCommonEventListener = listener;
   }
 
   @NonNull
@@ -87,8 +89,8 @@ public class PlexMovieListAdapter extends RecyclerView.Adapter<PlexMovieListAdap
           int position = getAdapterPosition();
           if (position == RecyclerView.NO_POSITION)
             return;
-          Video video = mVideo.get(position);
-          mOnFragmentEventListener.onItemSelect(video);
+
+          mOnCommonEventListener.onPlexItemSelect(mVideo, position);
         }
       });
       itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -97,8 +99,8 @@ public class PlexMovieListAdapter extends RecyclerView.Adapter<PlexMovieListAdap
           int position = getAdapterPosition();
           if (position == RecyclerView.NO_POSITION)
             return true;
-          Video video = mVideo.get(position);
-          mOnFragmentEventListener.onItemLongSelect(video);
+
+          mOnCommonEventListener.onPlexItemLongSelect(mVideo, position);
           return true;
         }
       });

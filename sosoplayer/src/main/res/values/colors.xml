@@ -32,9 +32,11 @@
   <color name="colorPrimaryDark">#2E7D32</color>
 
   <color name="lighter_gray">#ddd</color>
-
+  <color name="dk_gray">#eeaaaaaa</color>
   <color name="ab_background">#80000000</color>
   <color name="ab_text_title_shadow">#ff000000</color>
 
   <color name="red">#ff5722</color>
+  <color name="black">#000000</color>
+  <color name="white">#ffffff</color>
 </resources>

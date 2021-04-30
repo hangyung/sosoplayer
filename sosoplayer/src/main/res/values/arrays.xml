@@ -49,4 +49,13 @@
     <item>srt</item>
     <item>ass</item>
   </string-array>
+
+  <string-array name="subtitle_edgetype">
+    <item>None</item>
+    <item>OutLine</item>
+    <item>DropShadow</item>
+    <item>Raised</item>
+    <item>Deperssed</item>
+  </string-array>
+
 </resources>

@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.util.Size;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ext.extrastream.ExtraStreamUri;
 import com.google.android.exoplayer2.ext.extrastream.IOType;
@@ -30,7 +31,6 @@ public class FileInfo implements Parcelable {
 
   final String thumbnails;
   final ArrayList<String> subtitles;
-
 
   public static final class Builder {
     final  StorageType storageType;
@@ -229,15 +229,19 @@ public class FileInfo implements Parcelable {
   }
 
   public String getInfo() {
+    return getInfo(C.TIME_UNSET);
+  }
+
+  public String getInfo(long currentPostion) {
     if (directory)
       return "";
 
     String info = getSizeString();
-
-    if (duration > 0) {
-      info += ", ";
-      info += Util.makeDurationMessage(duration);
-    }
+//    if (currentPostion != C.TIME_UNSET) {
+//      info += ", <font color='#00FF00'>";
+//      info += Util.makeDurationMessage(currentPostion);
+//      info += "</font>";
+//    }
 
     if (subtitles.size() > 0) {
       info += ", ";
@@ -264,7 +268,7 @@ public class FileInfo implements Parcelable {
     return sizeString;
   }
 
-  private Uri getExtraUri(StorageInfo storageInfo, String curPath) {
+  public Uri getExtraUri(StorageInfo storageInfo, String curPath) {
     switch (storageInfo.getStorageType()){
       case Samba: {
           Uri curUri = new ExtraStreamUri(IOType.Samba, curPath)
@@ -295,6 +299,10 @@ public class FileInfo implements Parcelable {
       default:
           return Uri.parse(curPath);
     }
+  }
+
+  public Uri getExtraUri(StorageInfo storageInfo) {
+    return getExtraUri(storageInfo, path);
   }
 
   public  ArrayList<MediaItem> getMediaItems(StorageInfo storageInfo) {

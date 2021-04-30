@@ -14,7 +14,6 @@
 apply from: "$gradle.ext.exoplayerSettingsDir/common_library_config.gradle"
 
 dependencies {
-    implementation  'com.google.android.exoplayer:exoplayer-common:'+releaseVersion
     implementation 'androidx.annotation:annotation:' + androidxAnnotationVersion
     compileOnly 'org.jetbrains.kotlin:kotlin-annotations-jvm:' + kotlinAnnotationsVersion
     implementation ('com.squareup.retrofit2:converter-simplexml:2.1.0'){

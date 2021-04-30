@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import me.sjva.sosoplayer.R;
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ public class StorageListFragment extends Fragment implements AdapterView.OnItemL
         this.storageInfo = storageInfo;
         this.onMainEventListener = onMainEventListener;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_playlist, null);

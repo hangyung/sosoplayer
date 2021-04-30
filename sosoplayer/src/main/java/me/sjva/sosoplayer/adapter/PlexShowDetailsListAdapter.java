@@ -6,13 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import me.sjva.sosoplayer.R;
 import java.util.List;
+
+import me.sjva.sosoplayer.data.StorageInfo;
 import me.sjva.sosoplayer.util.Util;
-import me.sjva.sosoplayer.fragment.OnFragmentEventListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 import me.sjva.sosoplayer.ui.RecyclerViewEmptySupport;
 import com.google.android.exoplayer2.ext.plex.Directory;
 import com.google.android.exoplayer2.ext.plex.MediaContainer;
@@ -27,13 +28,15 @@ public class PlexShowDetailsListAdapter extends RecyclerView.Adapter<PlexShowDet
   private final List<Directory> mDirectories;
   private final String path;
   private final String token;
-  private OnFragmentEventListener mOnFragmentEventListener;
-  public PlexShowDetailsListAdapter(Context context, String path , String token, List<Directory> directories, OnFragmentEventListener listener) {
+  private OnCommonEventListener mOnCommonEventListener;
+  private final StorageInfo storageInfo;
+  public PlexShowDetailsListAdapter(Context context, StorageInfo storageInfo, String path , String token, List<Directory> directories, OnCommonEventListener listener) {
     mContext = context;
     this.path = path;
     this.token = token;
     mDirectories = directories;
-    mOnFragmentEventListener = listener;
+    mOnCommonEventListener = listener;
+    this.storageInfo = storageInfo;
   }
 
   @NonNull
@@ -53,22 +56,23 @@ public class PlexShowDetailsListAdapter extends RecyclerView.Adapter<PlexShowDet
     Directory directory = mDirectories.get(position);
 
     holder.txt_title.setText(directory.getTitle());
-    mOnFragmentEventListener.onLoadingStart();
+    mOnCommonEventListener.onLoadingStart();
     PlexApi.getDetails(path,   token, directory.getKey(), new Callback<MediaContainer>() {
 
       @Override
       public void onResponse(Call<MediaContainer> call, Response<MediaContainer> response) {
         MediaContainer mediaContainer = response.body();
 
-        PlexEpisodeListAdapter plexEpisodeListAdapter = new PlexEpisodeListAdapter(mContext, path, token, mediaContainer.getVideos(),
-            mOnFragmentEventListener);
+        PlexEpisodeListAdapter plexEpisodeListAdapter = new PlexEpisodeListAdapter(mContext,storageInfo,  path, token, mediaContainer.getVideos(),
+                mOnCommonEventListener);
         holder.recyclerView.setAdapter(plexEpisodeListAdapter);
-        mOnFragmentEventListener.onLoadingEnd();
+        mOnCommonEventListener.onLoadingEnd();
       }
 
       @Override
       public void onFailure(Call<MediaContainer> call, Throwable t) {
-        mOnFragmentEventListener.onError(t);
+        mOnCommonEventListener.onLoadingEnd();
+        mOnCommonEventListener.onError(t);
       }
     });
   }

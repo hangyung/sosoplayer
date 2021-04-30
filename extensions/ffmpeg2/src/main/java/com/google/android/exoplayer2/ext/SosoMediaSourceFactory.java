@@ -138,6 +138,10 @@ public final class SosoMediaSourceFactory implements MediaSourceFactory {
     this(dataSourceFactory, new DefaultExtractorsFactory(), true);
   }
 
+  public SosoMediaSourceFactory(DataSource.Factory dataSourceFactory, boolean useFFmpegExtractor) {
+    this(dataSourceFactory, new DefaultExtractorsFactory(), useFFmpegExtractor);
+  }
+
   /**
    * Creates a new instance.
    *

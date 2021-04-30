@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,49 +15,55 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.google.android.exoplayer2.MediaItem;
+
+import com.google.android.exoplayer2.ext.plex.Video;
+
 import java.util.ArrayList;
+import java.util.Collections;
+
 import me.sjva.sosoplayer.R;
+import me.sjva.sosoplayer.data.FileInfo;
 import me.sjva.sosoplayer.data.StorageInfo;
 import me.sjva.sosoplayer.data.StorageType;
-import me.sjva.sosoplayer.fragment.MediaListOnFragment;
+import me.sjva.sosoplayer.fragment.MediaListOnCommon;
 import me.sjva.sosoplayer.fragment.StorageListFragment;
 import me.sjva.sosoplayer.item.EntryItem;
-import me.sjva.sosoplayer.util.IntentUtil;
 import me.sjva.sosoplayer.util.SharedPreferencesUtil;
 import me.sjva.sosoplayer.util.Util;
 import me.sjva.sosoplayer.widget.ConfirmDialog;
 
 public class MainActivity extends AppCompatActivity implements OnMainEventListener {
   private static final String TAG = "MainActivity";
+  private static final int PLAYER_ACTIVITY_REQUSET_CODE = 0;
   private static final int MSG_ERROR = 0;
   private static final int MSG_INFO = 1;
 
 
   private StorageListFragment storgeListFragment;
-  private MediaListOnFragment mediaListFragment;
+  private MediaListOnCommon mediaListFragment;
   private DrawerLayout drawerLayout;
   private ActionBarDrawerToggle drawerToggle;
 
   private EntryItem mSelectedDrawerItem;
   private EntryItem mModifyingDrawerItem;
   private boolean isFragmnetChanged;
-  private ProgressBar progressBar;
 
   private StorageInfo storageInfo;
-
+  private SharedPreferencesUtil sharedPreferencesUtil;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    storageInfo = new StorageInfo(StorageType.MediaStore);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     isFragmnetChanged = false;
+
+    sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
+    storageInfo = sharedPreferencesUtil.getLastStorage();
 
     setupDrawerLayout();
     setupMediaListFragment(storageInfo, false);
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
 
   private void setupMediaListFragment( StorageInfo storageInfo, boolean force) {
     if (force || mediaListFragment == null) {
-      mediaListFragment = new MediaListOnFragment(storageInfo, this);
+      mediaListFragment = new MediaListOnCommon(storageInfo, this);
     }
 
     try {
@@ -178,18 +183,20 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
     this.storageInfo = storageInfo;
     setupMediaListFragment(storageInfo, true);
     setUpStorgeListFragment(storageInfo, true);
+
+    sharedPreferencesUtil.setLastStorage(storageInfo);
   }
 
   public void selectItem(EntryItem selectedItem) {
     this.storageInfo = selectedItem.info;
     setupMediaListFragment(storageInfo, true);
-
     drawerLayout.closeDrawer(GravityCompat.START );
+
+    sharedPreferencesUtil.setLastStorage(storageInfo);
   }
 
   @Override
   public void onAddStorage(StorageInfo storageInfo) {
-    SharedPreferencesUtil sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
     if (sharedPreferencesUtil.haveSameStorageInfo(storageInfo)) {
       handler.sendMessage(handler.obtainMessage(MSG_INFO, "Error Same StreamInfo already Saved"));
     } else {
@@ -200,21 +207,18 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
 
   @Override
   public void onModifyStorage(StorageInfo orgStorageInfo, StorageInfo newStorageInfo) {
-    SharedPreferencesUtil sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
     sharedPreferencesUtil.modifyStorageInfo(orgStorageInfo, newStorageInfo);
     updateStorage(newStorageInfo);
   }
 
   @Override
   public void onRemoveStorage(StorageInfo storageInfo) {
-    SharedPreferencesUtil sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
     sharedPreferencesUtil.removeStorageInfo(storageInfo);
     updateStorage(new StorageInfo(StorageType.MediaStore));
   }
 
   @Override
   public void onError(String message) {
-    //Util.showToast(this, message);
     handler.sendMessage(handler.obtainMessage(MSG_INFO, message));
   }
 
@@ -224,20 +228,64 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
     updateStorage(new StorageInfo(StorageType.MediaStore));
   }
 
-  public void startPlayer(ArrayList<MediaItem> mediaItems) {
-    Intent intent = new Intent(this, PlayerActivity.class);
-    IntentUtil.addToIntent(mediaItems, intent);
-//    ExtraStreamInfo extraStreamInfo = storageInfo.getExtraStreamInfo();
-//    if (extraStreamInfo != null) {
-//      intent.putExtra(PlayerActivity.EXTRA_STREAM_INFO, extraStreamInfo);
-//    }
+//  public void startPlayer(ArrayList<MediaItem> mediaItems) {
+//    Intent intent = new Intent(this, PlayerActivity.class);
+//    IntentUtil.addToIntent(mediaItems, intent);
+//
+//    startActivity(intent);
+//
+//  }
 
-    this.storageInfo = storageInfo;
+
+  public void startSettingActivity() {
+    Intent intent = new Intent(this, SettingsActivity.class);
     startActivity(intent);
-
-  //  finish();
   }
 
+  public void startPlayer(ArrayList<FileInfo> fileInfos, int postion) {
+    Intent intent = new Intent(this, PlayerActivity.class);
 
+    if (sharedPreferencesUtil.isNextFileAutoPlay()) {
+      intent.putParcelableArrayListExtra(PlayerActivity.KEY_FILE_INFO_LIST, fileInfos);
+      intent.putExtra(PlayerActivity.KEY_SELECTED_POSITION, postion);
+    } else {
+      ArrayList<FileInfo> newfileInfos = new ArrayList<FileInfo>();
+      newfileInfos.add(fileInfos.get(0));
+      intent.putParcelableArrayListExtra(PlayerActivity.KEY_FILE_INFO_LIST, newfileInfos);
+      intent.putExtra(PlayerActivity.KEY_SELECTED_POSITION, 0);
+    }
+
+    intent.putExtra(PlayerActivity.KEY_STORAGE_INFO, storageInfo);
+    intent.putExtra(PlayerActivity.KEY_FILE_INFO_TYPE, PlayerActivity.KEY_FILE_INFO_TYPE_COMMON);
+    startActivityForResult(intent, PLAYER_ACTIVITY_REQUSET_CODE);
+
+  }
+
+  public void startPlexPlayer(ArrayList<Video> fileInfos, int postion) {
+    Intent intent = new Intent(this, PlayerActivity.class);
+
+    if (sharedPreferencesUtil.isNextFileAutoPlay()) {
+      intent.putParcelableArrayListExtra(PlayerActivity.KEY_PLEXFILE_INFO_LIST, fileInfos);
+      intent.putExtra(PlayerActivity.KEY_SELECTED_POSITION, postion);
+    } else {
+      ArrayList<Video>  newfileInfos = new ArrayList<Video> ();
+      newfileInfos.add(fileInfos.get(0));
+      intent.putParcelableArrayListExtra(PlayerActivity.KEY_PLEXFILE_INFO_LIST, newfileInfos);
+      intent.putExtra(PlayerActivity.KEY_SELECTED_POSITION, 0);
+    }
+
+    intent.putExtra(PlayerActivity.KEY_STORAGE_INFO, storageInfo);
+    intent.putExtra(PlayerActivity.KEY_FILE_INFO_TYPE, PlayerActivity.KEY_FILE_INFO_TYPE_PLEX);
+    startActivityForResult(intent, PLAYER_ACTIVITY_REQUSET_CODE);
+  }
+
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == PLAYER_ACTIVITY_REQUSET_CODE) {
+      if (mediaListFragment != null) {
+        mediaListFragment.updateView();
+      }
+    }
+  }
 }
 

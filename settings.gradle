@@ -20,5 +20,4 @@ if (gradle.ext.has('exoplayerModulePrefix')) {
 
 include 'sosoplayer'
 
-
 apply from: 'core_settings.gradle'

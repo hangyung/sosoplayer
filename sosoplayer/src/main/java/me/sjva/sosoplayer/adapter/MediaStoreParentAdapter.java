@@ -14,19 +14,16 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import me.sjva.sosoplayer.data.FileInfo;
-import me.sjva.sosoplayer.fragment.OnItemSelectListener;
+import me.sjva.sosoplayer.fragment.OnCommonEventListener;
 
 
 public class MediaStoreParentAdapter extends RecyclerView.Adapter<MediaStoreParentAdapter.ViewHolder> {
   private final Context context;
-  private final OnItemSelectListener listener;
-  public interface MediaStoreParentEventLister{
-    void onItemSelect(String name, ArrayList<FileInfo> fileInfos);
-  }
-  
+  private final OnCommonEventListener listener;
+
 
   private final  TreeMap<String, ArrayList<FileInfo>> bucketMap;
-  public MediaStoreParentAdapter(Context context,   TreeMap<String, ArrayList<FileInfo>> bucketMap , OnItemSelectListener listener){
+  public MediaStoreParentAdapter(Context context,   TreeMap<String, ArrayList<FileInfo>> bucketMap , OnCommonEventListener listener){
     this.listener = listener;
     this.context = context;
     this.bucketMap = bucketMap;
@@ -80,7 +77,7 @@ public class MediaStoreParentAdapter extends RecyclerView.Adapter<MediaStorePare
           for (Map.Entry<String, ArrayList<FileInfo>> entry : bucketMap.entrySet()) {
             if (index == position) {
               String name = entry.getKey();
-              listener.onItemSelect(entry.getKey(), entry.getValue());
+              listener.onItemSelect(entry.getKey());
               break;
             }
             index++;

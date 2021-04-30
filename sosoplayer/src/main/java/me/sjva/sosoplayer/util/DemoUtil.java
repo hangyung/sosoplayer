@@ -23,13 +23,10 @@ import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.ext.soso.SosoDataSourceFactory;
 import me.sjva.sosoplayer.BuildConfig;
-import com.google.android.exoplayer2.ext.cronet.CronetDataSource;
-import com.google.android.exoplayer2.ext.cronet.CronetEngineWrapper;
+//import com.google.android.exoplayer2.ext.cronet.CronetDataSource;
+//import com.google.android.exoplayer2.ext.cronet.CronetEngineWrapper;
 import com.google.android.exoplayer2.ext.ffmpeg2.FfmpegRenderersFactory;
-import com.google.android.exoplayer2.offline.DownloadManager;
-import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
@@ -71,9 +68,6 @@ public final class DemoUtil {
   private static @MonotonicNonNull DatabaseProvider databaseProvider;
   private static @MonotonicNonNull File downloadDirectory;
   private static @MonotonicNonNull Cache downloadCache;
-  private static @MonotonicNonNull DownloadManager downloadManager;
-
-  private static @MonotonicNonNull DownloadNotificationHelper downloadNotificationHelper;
 
   /** Returns whether extension renderers should be used. */
   public static boolean useExtensionRenderers() {
@@ -96,11 +90,11 @@ public final class DemoUtil {
   public static synchronized HttpDataSource.Factory getHttpDataSourceFactory(Context context) {
     if (httpDataSourceFactory == null) {
       if (USE_CRONET_FOR_NETWORKING) {
-        context = context.getApplicationContext();
-        CronetEngineWrapper cronetEngineWrapper =
-            new CronetEngineWrapper(context, USER_AGENT, /* preferGMSCoreCronet= */ false);
-        httpDataSourceFactory =
-            new CronetDataSource.Factory(cronetEngineWrapper, Executors.newSingleThreadExecutor());
+//        context = context.getApplicationContext();
+//        CronetEngineWrapper cronetEngineWrapper =
+//            new CronetEngineWrapper(context, USER_AGENT, /* preferGMSCoreCronet= */ false);
+//        httpDataSourceFactory =
+//            new CronetDataSource.Factory(cronetEngineWrapper, Executors.newSingleThreadExecutor());
       } else {
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
