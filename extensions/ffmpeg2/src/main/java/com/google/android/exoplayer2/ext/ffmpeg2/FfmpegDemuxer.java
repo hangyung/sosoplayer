@@ -271,7 +271,11 @@ public class FfmpegDemuxer implements SeekMap {
           break;
       }
     } else {
-      return Extractor.RESULT_END_OF_INPUT;
+      if (customIo.isEos()) {
+          return Extractor.RESULT_END_OF_INPUT;
+      } else {
+          return  Extractor.RESULT_CONTINUE ;
+      }
     }
 
     return  Extractor.RESULT_CONTINUE ;

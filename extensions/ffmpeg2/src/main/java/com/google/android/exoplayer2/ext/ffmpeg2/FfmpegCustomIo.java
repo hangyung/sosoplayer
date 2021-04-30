@@ -125,5 +125,12 @@ public class FfmpegCustomIo implements DataSource{
   }
 
 
-
+  public boolean isEos() {
+    if (contentLength == C.LENGTH_UNSET)
+      return false;
+    if(this.postion == contentLength) {
+      return true;
+    }
+    return false;
+  }
 }
