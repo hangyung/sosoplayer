@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ext.soso.R;
@@ -52,6 +54,9 @@ import java.util.List;
   private static final int UX_STATE_ANIMATING_SHOW = 4;
 
   private final StyledPlayerControlView styledPlayerControlView;
+
+
+  @Nullable private final ViewGroup rightControls;
 
   @Nullable private final View controlsBackground;
   @Nullable private final ViewGroup centerControls;
@@ -86,6 +91,7 @@ import java.util.List;
   private boolean needToShowBars;
   private boolean animationEnabled;
 
+  private boolean isLock;
   @SuppressWarnings({
     "nullness:method.invocation.invalid",
     "nullness:methodref.receiver.bound.invalid"
@@ -101,8 +107,8 @@ import java.util.List;
     animationEnabled = true;
     uxState = UX_STATE_ALL_VISIBLE;
     shownButtons = new ArrayList<>();
-
     // Relating to Center View
+    isLock = false;
     controlsBackground = styledPlayerControlView.findViewById(R.id.soso_controls_background);
     centerControls = styledPlayerControlView.findViewById(R.id.soso_center_controls);
 
@@ -118,6 +124,7 @@ import java.util.List;
 
     // Relating to Bottom Bar Right View
     basicControls = styledPlayerControlView.findViewById(R.id.soso_basic_controls);
+    rightControls = styledPlayerControlView.findViewById(R.id.soso_controls_right);
 
     ValueAnimator fadeOutAnimator = ValueAnimator.ofFloat(1.0f, 0.0f);
     fadeOutAnimator.setInterpolator(new LinearInterpolator());
@@ -176,6 +183,10 @@ import java.util.List;
         new AnimatorListenerAdapter() {
           @Override
           public void onAnimationStart(Animator animation) {
+            if(isLock)
+              return;
+
+
             if (controlsBackground != null) {
               controlsBackground.setVisibility(View.VISIBLE);
             }
@@ -334,6 +345,8 @@ import java.util.List;
         new AnimatorListenerAdapter() {
           @Override
           public void onAnimationStart(Animator animation) {
+            if(isLock)
+              return;
             if (basicControls != null) {
               basicControls.setVisibility(View.VISIBLE);
             }
@@ -704,5 +717,25 @@ import java.util.List;
       height += marginLayoutParams.topMargin + marginLayoutParams.bottomMargin;
     }
     return height;
+  }
+
+
+  public void toggleLock(ImageView lockButton) {
+    if (isLock) {
+      lockButton.setImageResource(R.drawable.outline_lock_open_white_24);
+      bottomBar.setVisibility(View.VISIBLE);
+      basicControls.setVisibility(View.VISIBLE);
+      rightControls.setVisibility(View.VISIBLE);
+      centerControls.setVisibility(View.VISIBLE);
+      show();
+    } else {
+      lockButton.setImageResource(R.drawable.outline_lock_white_24);
+      hideImmediately();
+      bottomBar.setVisibility(View.GONE);
+      basicControls.setVisibility(View.GONE);
+      rightControls.setVisibility(View.GONE);
+      centerControls.setVisibility(View.GONE);
+    }
+    isLock = !isLock;
   }
 }

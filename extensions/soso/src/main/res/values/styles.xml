@@ -201,6 +201,11 @@
     <item name="android:contentDescription">@string/soso_controls_fullscreen_enter_description</item>
   </style>
 
+  <style name="SoSoStyledControls.Button.Bottom.Volume">
+    <item name="android:src">@drawable/outline_volume_up_white_24</item>
+    <item name="android:contentDescription">@string/soso_controls_fullscreen_enter_description</item>
+  </style>
+
   <style name="SoSoStyledControls.Button.Bottom.OverflowShow">
     <item name="android:src">@drawable/soso_styled_controls_overflow_show</item>
     <item name="android:contentDescription">@string/soso_controls_overflow_show_description</item>

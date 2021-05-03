@@ -3,20 +3,16 @@
 소소하게 만들고 있는 안드로이드 미디어 플레이어 입니다
 
 Exoplayer기반으로 개발하던 프로젝트입니다. 
-현재는 리스트 쪽만 일부 구현 되어 있습니다.
-Player 레이아웃은 exoplayer demo와 동일 합니다. (DataSourceFactory, MediaSourceFactory 만 변경 했습니다.)
-
 ![ex_screenshot](./image/0.png) ![ex_screenshot](./image/1.png)
 ![ex_screenshot](./image/3.png) ![ex_screenshot](./image/4.png) ![ex_screenshot](./image/5.png)
-![ex_screenshot](./image/6.png)
+![ex_screenshot](./image/6.png) ![ex_screenshot](./image/7.png)
 
 ## 주요 기능
 extensions 를 통해 여러 기능을 제공 지원합니다.
  
 ### 0. SoSoPlayer
  extrastream 을 사용하는 플레이어 입니다.
- 앞서 설명 드렸듯이 리스트 부분만 일부 구현 되어 있습니다.
- extensions 기능 참조용 데모라 보시면 될 듯 합니다.
+
 
 ### 1.extrastream 
 samba, ftp, webdav를 지원하는 extensions 입니다.
@@ -56,8 +52,8 @@ src/main/jni/ffmpeg 폴더에 ffmpeg 소스를 넣어주셔야 합니다.
 Exoplayer와 의존관계가 전혀 없는 소스로,  plex api를 사용하여, plex 정보를 받아옵니다.
 
 ### 4.soso
-Exoplayer에서 지원 못 하는 잡다한 부분을 뭉쳐 지원하려고 넣은 extension 입니다만.
-현재는 smi파서만 지원됩니다. SosoDataSourceFactory 를 사용하시면 됩니다. 
+Exoplayer에서 지원 못 하는 잡다한 부분을 뭉쳐 지원하려고 넣은 extension 입니다, exoplyaer ui 쪽 코드 클론과 
+현재는 smi파서가 들어가 있습니다. SosoDataSourceFactory 를 사용하시면 됩니다. 
 
 * 수정 필요 부분
    * exoplayer 의 경우 charset encoding을 무조건 utf-8로 고정하고 있어서, 자동 dectecting 기능을 넣어 charset encoding 를 결정하고 있는데,

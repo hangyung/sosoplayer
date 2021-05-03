@@ -28,6 +28,8 @@
   <string name="soso_controls_overflow_show_description">Show additional settings</string>
   <!-- Description for a media control button that enters fullscreen playback. [CHAR_LIMIT=40] -->
   <string name="soso_controls_fullscreen_enter_description">Enter fullscreen</string>
+  <string name="soso_controls_volume_enter_description">Volume Settings</string>
+
   <!-- Description for a media control button that exits fullscreen playback. [CHAR_LIMIT=40] -->
   <string name="soso_controls_fullscreen_exit_description">Exit fullscreen</string>
   <!-- Description for a media control button that causes the previous track to be played. [CHAR LIMIT=30] -->

@@ -199,5 +199,9 @@ public class Video implements Parcelable  {
   public List<Media> getMedia() {
     return media;
   }
+
+  public String getCurrentMediaKey() {
+    return String.format("plex://%s", key);
+  }
 }
 

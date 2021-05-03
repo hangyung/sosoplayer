@@ -52,7 +52,6 @@ import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.Events;
@@ -122,6 +121,7 @@ public class StyledPlayerControlView extends FrameLayout {
     void onPreButtonClick();
     void onNextButtonClick();
     void onSettingsButtonClick(View anchor);
+    void onVolumeSettingsButtonClick(View anchor);
     void onSpeedChange(float speed);
   }
 
@@ -202,7 +202,7 @@ public class StyledPlayerControlView extends FrameLayout {
   private boolean scrubbing;
   private int showTimeoutMs;
   private int timeBarMinUpdateIntervalMs;
-  private @RepeatModeUtil.RepeatToggleModes int repeatToggleModes;
+
   private long[] adGroupTimesMs;
   private boolean[] playedAdGroups;
   private long[] extraAdGroupTimesMs;
@@ -227,16 +227,15 @@ public class StyledPlayerControlView extends FrameLayout {
   // TODO(insun): Add setTrackNameProvider to use customized track name provider.
   private TrackNameProvider trackNameProvider;
 
+  @Nullable private ImageView lockButton;
   @Nullable private View audioTrackButton;
   @Nullable private ImageView subtitleButton;
   @Nullable private ImageView pipButton;
-  @Nullable private ImageView fullScreenButton;
-//  @Nullable private ImageView minimalFullScreenButton;
+  @Nullable private ImageView volumeButton;
   @Nullable private View settingsButton;
   @Nullable private TextView playbackSpeedText;
   @Nullable private View playbackSpeedUpButton;
   @Nullable private View playbackSpeedDownButton;
-
 
   public StyledPlayerControlView(Context context) {
     this(context, /* attrs= */ null);
@@ -266,7 +265,7 @@ public class StyledPlayerControlView extends FrameLayout {
     rewindMs = DefaultControlDispatcher.DEFAULT_REWIND_MS;
     fastForwardMs = DefaultControlDispatcher.DEFAULT_FAST_FORWARD_MS;
     showTimeoutMs = DEFAULT_SHOW_TIMEOUT_MS;
-    repeatToggleModes = DEFAULT_REPEAT_TOGGLE_MODES;
+
     timeBarMinUpdateIntervalMs = DEFAULT_TIME_BAR_MIN_UPDATE_INTERVAL_MS;
 
     LayoutInflater.from(context).inflate(controllerLayoutId, /* root= */ this);
@@ -293,10 +292,15 @@ public class StyledPlayerControlView extends FrameLayout {
       subtitleButton.setOnClickListener(componentListener);
     }
 
-    fullScreenButton = findViewById(R.id.soso_fullscreen);
-    initializeFullScreenButton(fullScreenButton, this::onFullScreenButtonClicked);
-//    minimalFullScreenButton = findViewById(R.id.soso_minimal_fullscreen);
-//    initializeFullScreenButton(minimalFullScreenButton, this::onFullScreenButtonClicked);
+    lockButton = findViewById(R.id.soso_lock);
+    if (lockButton != null) {
+      lockButton.setOnClickListener(componentListener);
+    }
+
+    volumeButton = findViewById(R.id.soso_volume);
+    if (volumeButton != null) {
+      volumeButton.setOnClickListener(componentListener);
+    }
 
     settingsButton = findViewById(R.id.soso_settings);
     if (settingsButton != null) {
@@ -362,14 +366,7 @@ public class StyledPlayerControlView extends FrameLayout {
     if (fastForwardButton != null) {
       fastForwardButton.setOnClickListener(componentListener);
     }
-//    repeatToggleButton = findViewById(R.id.soso_repeat_toggle);
-//    if (repeatToggleButton != null) {
-//      repeatToggleButton.setOnClickListener(componentListener);
-//    }
-//    shuffleButton = findViewById(R.id.soso_shuffle);
-//    if (shuffleButton != null) {
-//      shuffleButton.setOnClickListener(componentListener);
-//    }
+
 
     resources = context.getResources();
     buttonAlphaEnabled =
@@ -377,23 +374,11 @@ public class StyledPlayerControlView extends FrameLayout {
     buttonAlphaDisabled =
         (float) resources.getInteger(R.integer.soso_media_button_opacity_percentage_disabled) / 100;
 
-//    vrButton = findViewById(R.id.soso_vr);
-//    if (vrButton != null) {
-//      updateButton(/* enabled= */ false, vrButton);
-//    }
 
     controlViewLayoutManager = new StyledPlayerControlViewLayoutManager(this);
     controlViewLayoutManager.setAnimationEnabled(true);
 
 
-
-
-//    settingTexts[SETTINGS_AUDIO_TRACK_SELECTION_POSITION] =
-//            resources.getString(R.string.soso_track_selection_title_audio);
-//    settingIcons[SETTINGS_AUDIO_TRACK_SELECTION_POSITION] =
-//            resources.getDrawable(R.drawable.soso_styled_controls_audiotrack);
-
-//    settingsAdapter = new SettingsAdapter(settingTexts, settingIcons);
     settingsWindowMargin = resources.getDimensionPixelSize(R.dimen.soso_settings_offset);
     settingsView =
         (RecyclerView)
@@ -453,10 +438,8 @@ public class StyledPlayerControlView extends FrameLayout {
     controlViewLayoutManager.setShowButton(audioTrackButton, true);
     controlViewLayoutManager.setShowButton(subtitleButton, true);
 //    controlViewLayoutManager.setShowButton(vrButton, false);
-    controlViewLayoutManager.setShowButton(fullScreenButton, true);
+    controlViewLayoutManager.setShowButton(volumeButton, true);
 
-//    controlViewLayoutManager.setShowButton(
-//        repeatToggleButton, repeatToggleModes != RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE);
     addOnLayoutChangeListener(this::onLayoutChange);
   }
 
@@ -657,95 +640,6 @@ public class StyledPlayerControlView extends FrameLayout {
     }
   }
 
-//  /**
-//   * Returns which repeat toggle modes are enabled.
-//   *
-//   * @return The currently enabled {@link RepeatModeUtil.RepeatToggleModes}.
-//   */
-//  public @RepeatModeUtil.RepeatToggleModes int getRepeatToggleModes() {
-//    return repeatToggleModes;
-//  }
-//
-//  /**
-//   * Sets which repeat toggle modes are enabled.
-//   *
-//   * @param repeatToggleModes A set of {@link RepeatModeUtil.RepeatToggleModes}.
-//   */
-//  public void setRepeatToggleModes(@RepeatModeUtil.RepeatToggleModes int repeatToggleModes) {
-//    this.repeatToggleModes = repeatToggleModes;
-//    if (player != null) {
-//      @Player.RepeatMode int currentMode = player.getRepeatMode();
-//      if (repeatToggleModes == RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
-//          && currentMode != Player.REPEAT_MODE_OFF) {
-//        controlDispatcher.dispatchSetRepeatMode(player, Player.REPEAT_MODE_OFF);
-//      } else if (repeatToggleModes == RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE
-//          && currentMode == Player.REPEAT_MODE_ALL) {
-//        controlDispatcher.dispatchSetRepeatMode(player, Player.REPEAT_MODE_ONE);
-//      } else if (repeatToggleModes == RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL
-//          && currentMode == Player.REPEAT_MODE_ONE) {
-//        controlDispatcher.dispatchSetRepeatMode(player, Player.REPEAT_MODE_ALL);
-//      }
-//    }
-//    controlViewLayoutManager.setShowButton(
-//        repeatToggleButton, repeatToggleModes != RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE);
-//    updateRepeatModeButton();
-//  }
-
-//  /** Returns whether the shuffle button is shown. */
-//  public boolean getShowShuffleButton() {
-//    return controlViewLayoutManager.getShowButton(shuffleButton);
-//  }
-//
-//  /**
-//   * Sets whether the shuffle button is shown.
-//   *
-//   * @param showShuffleButton Whether the shuffle button is shown.
-//   */
-//  public void setShowShuffleButton(boolean showShuffleButton) {
-//    controlViewLayoutManager.setShowButton(shuffleButton, showShuffleButton);
-//    updateShuffleButton();
-//  }
-//
-//  /** Returns whether the subtitle button is shown. */
-//  public boolean getShowSubtitleButton() {
-//    return controlViewLayoutManager.getShowButton(subtitleButton);
-//  }
-//
-//  /**
-//   * Sets whether the subtitle button is shown.
-//   *
-//   * @param showSubtitleButton Whether the subtitle button is shown.
-//   */
-//  public void setShowSubtitleButton(boolean showSubtitleButton) {
-//    controlViewLayoutManager.setShowButton(subtitleButton, showSubtitleButton);
-//  }
-//
-//  /** Returns whether the VR button is shown. */
-//  public boolean getShowVrButton() {
-//    return controlViewLayoutManager.getShowButton(vrButton);
-//  }
-//
-//  /**
-//   * Sets whether the VR button is shown.
-//   *
-//   * @param showVrButton Whether the VR button is shown.
-//   */
-//  public void setShowVrButton(boolean showVrButton) {
-//    controlViewLayoutManager.setShowButton(vrButton, showVrButton);
-//  }
-
-//  /**
-//   * Sets listener for the VR button.
-//   *
-//   * @param onClickListener Listener for the VR button, or null to clear the listener.
-//   */
-//  public void setVrButtonListener(@Nullable OnClickListener onClickListener) {
-//    if (vrButton != null) {
-//      vrButton.setOnClickListener(onClickListener);
-//      updateButton(onClickListener != null, vrButton);
-//    }
-//  }
-
   /**
    * Sets whether an animation is used to show and hide the playback controls.
    *
@@ -786,7 +680,7 @@ public class StyledPlayerControlView extends FrameLayout {
   public void setOnFullScreenModeChangedListener(
       @Nullable OnFullScreenModeChangedListener listener) {
     onFullScreenModeChangedListener = listener;
-    updateFullScreenButtonVisibility(fullScreenButton, listener != null);
+
 //    updateFullScreenButtonVisibility(minimalFullScreenButton, listener != null);
   }
 
@@ -832,10 +726,7 @@ public class StyledPlayerControlView extends FrameLayout {
   /* package */ void updateAll() {
     updatePlayPauseButton();
     updateNavigation();
-//    updateRepeatModeButton();
-//    updateShuffleButton();
     updateTrackLists();
-
     updateTimeline();
   }
 
@@ -1289,18 +1180,7 @@ public class StyledPlayerControlView extends FrameLayout {
     return controlDispatcher.dispatchSeekTo(player, windowIndex, positionMs);
   }
 
-  private void onFullScreenButtonClicked(View v) {
-    if (onFullScreenModeChangedListener == null) {
-      return;
-    }
 
-    isFullScreen = !isFullScreen;
-    updateFullScreenButtonForState(fullScreenButton, isFullScreen);
-//    updateFullScreenButtonForState(minimalFullScreenButton, isFullScreen);
-    if (onFullScreenModeChangedListener != null) {
-      onFullScreenModeChangedListener.onFullScreenModeChanged(isFullScreen);
-    }
-  }
 
   private void updateFullScreenButtonForState(
       @Nullable ImageView fullScreenButton, boolean isFullScreen) {
@@ -1507,13 +1387,7 @@ public class StyledPlayerControlView extends FrameLayout {
     return true;
   }
 
-  private static void initializeFullScreenButton(View fullScreenButton, OnClickListener listener) {
-    if (fullScreenButton == null) {
-      return;
-    }
-    fullScreenButton.setVisibility(GONE);
-    fullScreenButton.setOnClickListener(listener);
-  }
+
 
   private static void updateFullScreenButtonVisibility(
       @Nullable View fullScreenButton, boolean visible) {
@@ -1641,6 +1515,15 @@ public class StyledPlayerControlView extends FrameLayout {
       } else if (subtitleButton == view) {
         controlViewLayoutManager.removeHideCallbacks();
         displaySettingsWindow(subtitleButton, textTrackSelectionAdapter);
+      } else if (volumeButton == view) {
+        controlViewLayoutManager.removeHideCallbacks();
+        if (onButtonClickEventListener != null) {
+          onButtonClickEventListener.onVolumeSettingsButtonClick(volumeButton);
+        }
+      } else if (lockButton == view) {
+        controlViewLayoutManager.removeHideCallbacks();
+        controlViewLayoutManager.toggleLock(lockButton);
+
       }
     }
   }
