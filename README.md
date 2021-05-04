@@ -49,7 +49,8 @@ src/main/jni/ffmpeg 폴더에 ffmpeg 소스를 넣어주셔야 합니다.
    * 오디오가 디코딩의 경우 exoplayer구조상 선택되지 않는 트랙도 pcm으로 변환하는데, 비디오 디코딩 같이 패킷만 올리고, 실제 트랙 사용시 디코딩하는 구조로 변경해야 합니다.
 
 ### 3.plex 
-Exoplayer와 의존관계가 전혀 없는 소스로,  plex api를 사용하여, plex 정보를 받아옵니다.
+Exoplayer와 의존관계가 전혀 없는 소스로,  plex api를 사용하여, plex 정보를 받아옵니다. 
+문제는 plex 서버의 경우 트랜스 코딩을 해서인지,socket time out이 너무 자주 발생
 
 ### 4.soso
 Exoplayer에서 지원 못 하는 잡다한 부분을 뭉쳐 지원하려고 넣은 extension 입니다, exoplyaer ui 쪽 코드 클론과 
