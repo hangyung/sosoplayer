@@ -1,5 +1,8 @@
 package me.sjva.sosoplayer.activity;
 
+import android.os.Parcelable;
+
+import me.sjva.sosoplayer.data.FileInfo;
 import me.sjva.sosoplayer.data.StorageInfo;
 
 public interface OnMainEventListener {

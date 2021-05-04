@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -104,6 +105,7 @@ public class PlayerActivity extends AppCompatActivity
   public static final String KEY_FILE_INFO_LIST = "fileinfo_list";
   public static final String KEY_PLEXFILE_INFO_LIST = "plex_fileinfo_list";
   public static final String KEY_SELECTED_POSITION = "selected_position";
+  public static final String KEY_PLAY_FROM_SCRATCH = "play_from_scratch";
 
   private static final String KEY_TRACK_SELECTOR_PARAMETERS = "track_selector_parameters";
   private static final String KEY_WINDOW = "window";
@@ -133,6 +135,7 @@ public class PlayerActivity extends AppCompatActivity
   private StorageInfo storageInfo;
 
   private String currentMediaKey;
+  private boolean playFromScratch;
   // For ad playback only.
 
 
@@ -167,6 +170,7 @@ public class PlayerActivity extends AppCompatActivity
       mediaItemIndex = savedInstanceState.getInt(KEY_SELECTED_POSITION, 0);
       fileInfoType = savedInstanceState.getInt(KEY_FILE_INFO_TYPE, KEY_FILE_INFO_TYPE_COMMON);
       storageInfo  = savedInstanceState.getParcelable(KEY_STORAGE_INFO);
+      playFromScratch = savedInstanceState.getBoolean(KEY_PLAY_FROM_SCRATCH, false);
       switch (fileInfoType){
         case KEY_FILE_INFO_TYPE_COMMON: {
           fileInfos = new ArrayList<FileInfo>();
@@ -186,6 +190,7 @@ public class PlayerActivity extends AppCompatActivity
       mediaItemIndex = intent.getIntExtra(KEY_SELECTED_POSITION, 0);
       fileInfoType = intent.getIntExtra(KEY_FILE_INFO_TYPE, KEY_FILE_INFO_TYPE_COMMON);
       storageInfo  = intent.getParcelableExtra(KEY_STORAGE_INFO);
+      playFromScratch = intent.getBooleanExtra(KEY_PLAY_FROM_SCRATCH, false);
       switch (fileInfoType){
         case KEY_FILE_INFO_TYPE_COMMON: {
           fileInfos = new ArrayList<FileInfo>();
@@ -316,7 +321,7 @@ public class PlayerActivity extends AppCompatActivity
     outState.putInt(KEY_FILE_INFO_TYPE, fileInfoType);
     outState.putParcelable(KEY_STORAGE_INFO, storageInfo);
 
-
+    outState.putBoolean(KEY_PLAY_FROM_SCRATCH, playFromScratch);
     switch (fileInfoType){
       case KEY_FILE_INFO_TYPE_COMMON: {
         outState.putParcelableArrayList(KEY_FILE_INFO_LIST, fileInfos);
@@ -420,7 +425,7 @@ public class PlayerActivity extends AppCompatActivity
       return false;
     }
     boolean haveStartPosition = false;
-    if (sharedPreferencesUtil.isContinuationPlayback()) {
+    if (sharedPreferencesUtil.isContinuationPlayback() && !playFromScratch) {
       Pair<Integer, Long>  lastPostion = sharedPreferencesUtil.loadLastPosition(currentMediaKey);
       if (lastPostion != null) {
         haveStartPosition = lastPostion.first != C.INDEX_UNSET;
@@ -560,10 +565,27 @@ public class PlayerActivity extends AppCompatActivity
 
   @Override
   public void onStartPlayer(ArrayList<MediaItem> mediaItems) {
-    boolean haveStartPosition = startWindow != C.INDEX_UNSET;
-    if (haveStartPosition) {
-      player.seekTo(startWindow, startPosition);
+//    boolean haveStartPosition = startWindow != C.INDEX_UNSET;
+//    if (haveStartPosition) {
+//      player.seekTo(startWindow, startPosition);
+//    }
+
+    boolean haveStartPosition = false;
+    if (sharedPreferencesUtil.isContinuationPlayback() && !playFromScratch) {
+      Pair<Integer, Long>  lastPostion = sharedPreferencesUtil.loadLastPosition(currentMediaKey);
+      if (lastPostion != null) {
+        haveStartPosition = lastPostion.first != C.INDEX_UNSET;
+        if (haveStartPosition) {
+          player.seekTo(lastPostion.first, lastPostion.second);
+        }
+      } else {
+        haveStartPosition = startWindow != C.INDEX_UNSET;
+        if (haveStartPosition) {
+          player.seekTo(startWindow, startPosition);
+        }
+      }
     }
+
     player.setMediaItems(mediaItems, /* resetPosition= */ !haveStartPosition);
     player.prepare();
   }

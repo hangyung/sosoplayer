@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+  <string name="application_name">SosoPlayer</string>
+
+  <string name="error_generic">재생 실패</string>
+
+  <string name="error_drm_unsupported_scheme">폰에서 지원하지 않는 DRM 컨텐츠 입니다.</string>
+
+  <string name="error_no_decoder">폰에서 지원하지 않는 형식의 컨텐츠입니다. <xliff:g id="mime_type">%1$s</xliff:g></string>
+
+  <string name="error_no_secure_decoder">폰에서 지원하지 않는 형식의 DRM 컨텐츠 입니다. <xliff:g id="mime_type">%1$s</xliff:g></string>
+
+  <string name="error_querying_decoders">폰에서 지원하지 지원하지 않는 형식의 컨텐츠입니다.</string>
+
+  <string name="error_instantiating_decoder">디코더를 생성하는데 실패 했습니다. <xliff:g id="decoder_name">%1$s</xliff:g></string>
+
+  <string name="error_unsupported_video">비디오 트랙을 폰에서 지원하지 못 합니다.</string>
+
+  <string name="error_unsupported_audio">오디오 트랙을 폰에서 지원하지 못 합니다.</string>
+
+  <string name="storage_permission_denied">저장소에 대한 엑세스 권한이 없습니다.</string>
+
+
+  <string name="error_plex">플렉스 서버와의 연동에서 오류가 발생했습니다.</string>
+
+  <string name="dialog_string_cannot_permit">권한 요청에 실패 했습니다.</string>
+  <string name="dialog_string_cannot_permit_play_movie">로컬 컨텐츠 재생을 위해 접근 권한이 필요합니다.</string>
+  <string name="dialog_string_setting">설정</string>
+
+  <string name="drawer_open">Storage 목록을 오픈합니다.</string>
+  <string name="drawer_close">Storage 목록을 닫습니다.</string>
+  <string name="no_media">재생할 컨텐츠를 찾을 수 없습니다.</string>
+  <string name="main_menu_add_storate">Storage 추가</string>
+  <string name="main_menu_settings">설정</string>
+  <string name="ok">OK</string>
+  <string name="cancel">cancel</string>
+  <string name="typing_text">직접 입력</string>
+  <string name="error_cannot_access">"오류, 경로에 접근 할 수 없습니다."</string>
+  <string name="storage_edit">Storage 수정</string>
+  <string name="storage_remove">Storage 삭제</string>
+  <string name="confirm_exit">종료 확인</string>
+  <string name="confirm_exit_message">어플을 종료할까요?</string>
+  <string name="confirm_remove">목록 삭제</string>
+  <string name="confirm_remove_message">목록을 정말 삭제 하시겠습니까?</string>
+  <string name="play_from_scratch">처음부터 재생</string>
+
+  <string name="error_title">오류</string>
+  <string name="playback_complete">재생 완료</string>
+  <string name="soso_settings_category_player">플레이어 설정</string>
+  <string name="soso_settings_title_player_continuation">이어보기</string>
+  <string name="soso_settings_summary_player_continuation">마지막 재생 시점 부터 이어서 재생합니다</string>
+  <string name="soso_settings_title_nextfile_auto_playback">자동 넘김</string>
+  <string name="soso_settings_summary_nextfile_auto_playback">컨텐츠의 재생이 끝나면 자동으로 다음 파일이 재생됩니다.</string>
+  <string name="soso_settings_title_use_ffmpeg_progress">Ffmpeg 사용</string>
+  <string name="soso_settings_summary_use_ffmpeg_progress">재생 시 ffmpeg 파서를 사용합니다. off시 exoplayer 기본 파서를 사용합니다.</string>
+  <string name="soso_settings_title_keep_last_playbackspeed">배속 재생</string>
+  <string name="soso_settings_summary_keep_last_playbackspeed">마지막 배속 재생 속도를 유지합니다.</string>
+  <string name="soso_settings_category_subtitle">자막 설정</string>
+  <string name="soso_settings_title_subtitle_foregroundcolor">자막 색상</string>
+  <string name="soso_settings_summary_subtitle_foregroundcolor">자막 색상을 지정합니다.</string>
+  <string name="soso_settings_title_subtitle_backgroundcolor">자막 배경색</string>
+  <string name="soso_settings_summary_subtitle_backgroundcolor">자막의 배경색을 지정합니다.</string>
+  <string name="soso_settings_title_subtitle_windowcolor">자막 윈도우 색</string>
+  <string name="soso_settings_summary_subtitle_windowcolor">자막 윈도우의 색상을 지정합니다.</string>
+  <string name="soso_settings_title_subtitle_edgetype">자막 모서리 형식</string>
+  <string name="soso_settings_summary_subtitle_edgetype">자막의 모서리 형식을 지정합니다.</string>
+  <string name="soso_settings_title_subtitle_edgecolor">자막 모서리 색상</string>
+  <string name="soso_settings_summary_subtitle_edgecolor">자막의 모서리 색상을 지정합니다.</string>
+
+  <string name="soso_settings_category_info">정보</string>
+  <string name="soso_settings_category_info_license">사용 중인 open source 목록입니다.</string>
+</resources>

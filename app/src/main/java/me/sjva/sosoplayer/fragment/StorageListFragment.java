@@ -35,10 +35,15 @@ public class StorageListFragment extends Fragment implements AdapterView.OnItemL
     private StorageInfo storageInfo;
     private EntryItem mSelectedItem = null;
     private OnMainEventListener onMainEventListener;
-    public StorageListFragment(StorageInfo storageInfo,  OnMainEventListener onMainEventListener) {
+    public StorageListFragment() {
+        this.storageInfo = null;
+        this.onMainEventListener = null;
+    }
+    public void set(StorageInfo storageInfo,  OnMainEventListener onMainEventListener) {
         this.storageInfo = storageInfo;
         this.onMainEventListener = onMainEventListener;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_playlist, null);
@@ -96,7 +101,7 @@ public class StorageListFragment extends Fragment implements AdapterView.OnItemL
             }
             mAdapter = new StorageListAdapter(getActivity(), mItems);
             mDrawerList.setAdapter(mAdapter);
-            if (mSelectedItem == null) {
+            if (mSelectedItem == null && storageInfo != null) {
                 mSelectedItem = new EntryItem( storageInfo,  storageInfo.getStorageType());
             }
             updateMenu();

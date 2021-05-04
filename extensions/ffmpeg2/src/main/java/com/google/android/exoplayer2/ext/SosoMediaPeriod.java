@@ -994,9 +994,12 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
       int result = Extractor.RESULT_CONTINUE;
       try {
 
-        while (!loadCanceled) {
-          if (ffmpegDemuxer.init(uri, dataSource, extractorOutput)) {
-            break;
+        ffmpegDemuxer.init(uri, dataSource, extractorOutput);
+        while (!ffmpegDemuxer.isExtractorInitialized() &&  !loadCanceled ) {
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
           }
         }
 
@@ -1005,7 +1008,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
           pendingExtractorSeek = false;
         }
         int packetCount = 0;
-        long startTime = System.currentTimeMillis();
         int eosCount = 0;
         while (result == Extractor.RESULT_CONTINUE && !loadCanceled) {
           try {
@@ -1016,6 +1018,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
             result = ffmpegDemuxer.read();
             if (packetCount > 100 ) {
               loadCondition.close();
+              packetCount = 0;
               handler.post(onContinueLoadingRequestedRunnable);
             }
 

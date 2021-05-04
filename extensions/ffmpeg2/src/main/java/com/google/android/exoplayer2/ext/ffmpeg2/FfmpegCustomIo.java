@@ -9,11 +9,13 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class FfmpegCustomIo implements DataSource{
-  private static final int MAX_SIZE  = 1024*1024; // 1M
+  private static final String TAG = "FfmpegCustomIo";
+  private static final int MAX_SIZE  = 1048576; // 1M
   private static final int AVSEEK_SIZE  = 0x10000;
   private long postion;
   private long contentLength;
@@ -42,7 +44,22 @@ public class FfmpegCustomIo implements DataSource{
         this.byteBuffer.put(tempBuffer, 0, (int)readSize);
       }
     }catch (Exception e) {
-      e.printStackTrace();
+      Log.e(TAG, "read retry " + size);
+      if (readSize <= 0) {
+        try {
+          close();
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace();
+          }
+          open(this.postion);
+          return read(size);
+        }catch (Exception e2) {
+          Log.e(TAG, "retry fail");
+          return 0;
+        }
+      }
     }
 
     return readSize;
@@ -69,11 +86,15 @@ public class FfmpegCustomIo implements DataSource{
         this.postion = pos;
         break;
       case 1: // SEEK_CUR
+        if (pos == 0)
+          return 0;
         close();
         open(this.postion + pos);
         this.postion += pos;
         break;
       case 2: // SEEK_END
+        if (pos == 0)
+          return 0;
         close();
         open(contentLength + pos);
         this.postion = contentLength + pos;
@@ -85,10 +106,29 @@ public class FfmpegCustomIo implements DataSource{
   }
 
   public void open(long offset) throws IOException {
+
     DataSpec dataSpec = buildDataSpec(offset);
-    long length = dataSource.open(dataSpec);
+    long length = C.LENGTH_UNSET;
+    while (length == C.LENGTH_UNSET) {
+      try {
+        length = dataSource.open(dataSpec);
+      }catch (Exception e) {
+        dataSource.close();
+        Log.e(TAG, "retry open " + offset);
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException interruptedException) {
+          interruptedException.printStackTrace();
+        }
+        length = dataSource.open(dataSpec); // retry
+      }
+    }
+
     if (length != C.LENGTH_UNSET) {
       contentLength = length + offset;
+      if (contentLength <0 ) {
+        throw new IOException("read fail");
+      }
     }
   }
 

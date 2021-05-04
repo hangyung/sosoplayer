@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +27,7 @@ import me.sjva.sosoplayer.R;
 import me.sjva.sosoplayer.data.FileInfo;
 import me.sjva.sosoplayer.data.StorageInfo;
 import me.sjva.sosoplayer.data.StorageType;
-import me.sjva.sosoplayer.fragment.MediaListOnCommon;
+import me.sjva.sosoplayer.fragment.MediaListCommonFragment;
 import me.sjva.sosoplayer.fragment.StorageListFragment;
 import me.sjva.sosoplayer.item.EntryItem;
 import me.sjva.sosoplayer.util.SharedPreferencesUtil;
@@ -34,13 +36,15 @@ import me.sjva.sosoplayer.widget.ConfirmDialog;
 
 public class MainActivity extends AppCompatActivity implements OnMainEventListener {
   private static final String TAG = "MainActivity";
+  public static final String KEY_STORAGE_INFO = "storageInfo";
+
   private static final int PLAYER_ACTIVITY_REQUSET_CODE = 0;
   private static final int MSG_ERROR = 0;
   private static final int MSG_INFO = 1;
 
 
   private StorageListFragment storgeListFragment;
-  private MediaListOnCommon mediaListFragment;
+  private MediaListCommonFragment mediaListFragment;
   private DrawerLayout drawerLayout;
   private ActionBarDrawerToggle drawerToggle;
 
@@ -54,7 +58,18 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
+    sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
+    if (savedInstanceState != null) {
+      storageInfo  = savedInstanceState.getParcelable(KEY_STORAGE_INFO);
+      if (mediaListFragment != null) {
+        mediaListFragment.set(storageInfo, this);
+      }
+      if (storgeListFragment != null) {
+        storgeListFragment.set(storageInfo, this);
+      }
+    } else {
+      storageInfo = sharedPreferencesUtil.getLastStorage();
+    }
   }
 
   @Override
@@ -62,17 +77,23 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
     super.onResume();
     isFragmnetChanged = false;
 
-    sharedPreferencesUtil = SharedPreferencesUtil.getInstance(this);
-    storageInfo = sharedPreferencesUtil.getLastStorage();
-
     setupDrawerLayout();
     setupMediaListFragment(storageInfo, false);
     setUpStorgeListFragment(storageInfo, false);
   }
 
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(KEY_STORAGE_INFO, storageInfo);
+  }
+
+
   private void setupMediaListFragment( StorageInfo storageInfo, boolean force) {
     if (force || mediaListFragment == null) {
-      mediaListFragment = new MediaListOnCommon(storageInfo, this);
+      mediaListFragment = new MediaListCommonFragment();
+      mediaListFragment.set(storageInfo, this);
     }
 
     try {
@@ -84,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
 
   private void setUpStorgeListFragment(StorageInfo storageInfo, boolean force) {
     if (force || storgeListFragment == null) {
-      storgeListFragment = new StorageListFragment(storageInfo, this);
+      storgeListFragment = new StorageListFragment();
+      storgeListFragment.set(storageInfo, this);
     }
 
     try {
@@ -242,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
     startActivity(intent);
   }
 
-  public void startPlayer(ArrayList<FileInfo> fileInfos, int postion) {
+  public void startPlayer(ArrayList<FileInfo> fileInfos, int postion, boolean playFromScratch) {
     Intent intent = new Intent(this, PlayerActivity.class);
 
     if (sharedPreferencesUtil.isNextFileAutoPlay()) {
@@ -257,11 +279,12 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
 
     intent.putExtra(PlayerActivity.KEY_STORAGE_INFO, storageInfo);
     intent.putExtra(PlayerActivity.KEY_FILE_INFO_TYPE, PlayerActivity.KEY_FILE_INFO_TYPE_COMMON);
+    intent.putExtra(PlayerActivity.KEY_PLAY_FROM_SCRATCH, playFromScratch);
     startActivityForResult(intent, PLAYER_ACTIVITY_REQUSET_CODE);
 
   }
 
-  public void startPlexPlayer(ArrayList<Video> fileInfos, int postion) {
+  public void startPlexPlayer(ArrayList<Video> fileInfos, int postion, boolean playFromScratch) {
     Intent intent = new Intent(this, PlayerActivity.class);
 
     if (sharedPreferencesUtil.isNextFileAutoPlay()) {
@@ -276,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
 
     intent.putExtra(PlayerActivity.KEY_STORAGE_INFO, storageInfo);
     intent.putExtra(PlayerActivity.KEY_FILE_INFO_TYPE, PlayerActivity.KEY_FILE_INFO_TYPE_PLEX);
+    intent.putExtra(PlayerActivity.KEY_PLAY_FROM_SCRATCH, playFromScratch);
     startActivityForResult(intent, PLAYER_ACTIVITY_REQUSET_CODE);
   }
 
@@ -285,6 +309,20 @@ public class MainActivity extends AppCompatActivity implements OnMainEventListen
       if (mediaListFragment != null) {
         mediaListFragment.updateView();
       }
+    }
+  }
+
+  public void playFromScratch(Parcelable parcelable) {
+    if (parcelable instanceof FileInfo) {
+      FileInfo fileInfo = (FileInfo)parcelable;
+      ArrayList<FileInfo> fileInfos = new ArrayList<FileInfo>();
+      fileInfos.add(fileInfo);
+      startPlayer(fileInfos, 0, true);
+    } else if (parcelable instanceof Video) {
+      Video video = (Video)parcelable;
+      ArrayList<Video> fileInfos = new ArrayList<Video>();
+      fileInfos.add(video);
+      startPlexPlayer(fileInfos, 0, true);
     }
   }
 }

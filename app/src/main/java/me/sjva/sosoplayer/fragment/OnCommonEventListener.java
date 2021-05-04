@@ -1,5 +1,7 @@
 package me.sjva.sosoplayer.fragment;
 
+import android.os.Parcelable;
+
 import com.google.android.exoplayer2.ext.plex.Directory;
 import com.google.android.exoplayer2.ext.plex.Video;
 
@@ -23,4 +25,6 @@ public interface OnCommonEventListener {
 
   void onLoadingStart();
   void onLoadingEnd();
+
+  void onPlayFromScratch(Parcelable parcelable);
 }

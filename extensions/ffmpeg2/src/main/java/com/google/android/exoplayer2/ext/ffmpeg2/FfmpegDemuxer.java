@@ -54,6 +54,7 @@ public class FfmpegDemuxer implements SeekMap {
     public int nalUnitLengthFieldLength;
     public int trackIndex;
     public ParsableByteArray nalPrefixData;
+    public long lastPts;
 
     public FfmpegTrack(int trackType, int trackIndex, TrackOutput trackOutput, int nalUnitLengthFieldLength) {
       this.trackType = trackType;
@@ -67,11 +68,30 @@ public class FfmpegDemuxer implements SeekMap {
         nalPreFix[nalUnitLengthFieldLength] = 0x01;
         nalPrefixData = new ParsableByteArray(nalPreFix);
       }
+      this.lastPts = C.TIME_UNSET;
     }
 
+      public void setLastPts(long timeUs) {
+        if (timeUs != C.TIME_UNSET) {
+            this.lastPts = timeUs;
+        }
+      }
+
+      public void clearLastPts() {
+          this.lastPts = C.TIME_UNSET;
+      }
+
+
+      public long getTimeUs() {
+        return this.lastPts;
+      }
   }
 
   private Map<Integer, FfmpegTrack> trackMap;
+
+  public boolean isExtractorInitialized() {
+      return extractorInitialized;
+  }
 
   public boolean init( Uri uri, DataSource dataSource, ExtractorOutput output) throws IOException {
     if(!extractorInitialized) {
@@ -231,6 +251,10 @@ public class FfmpegDemuxer implements SeekMap {
   }
 
   public void seek( long seekTimeUs) {
+    for( Map.Entry<Integer, FfmpegTrack> elem : trackMap.entrySet() ) {
+      elem.getValue().clearLastPts();
+    }
+
     FfmpegDemuxerSeekTo(nativeContext, seekTimeUs);
   }
 
@@ -242,8 +266,10 @@ public class FfmpegDemuxer implements SeekMap {
         case C.TRACK_TYPE_AUDIO:
           if (ffmpegPacket.data.capacity() > 0) {
             ffmpegPacket.data.setPosition(0);
+
+            track.setLastPts(ffmpegPacket.getTimeUs());
             track.trackOutput.sampleData(ffmpegPacket.data, ffmpegPacket.data.capacity());
-            track.trackOutput.sampleMetadata(ffmpegPacket.getTimeUs(),C.BUFFER_FLAG_KEY_FRAME, ffmpegPacket.data.capacity(), 0, null);
+            track.trackOutput.sampleMetadata(track.getTimeUs(),C.BUFFER_FLAG_KEY_FRAME, ffmpegPacket.data.capacity(), 0, null);
           }
           break;
         case C.TRACK_TYPE_VIDEO: {
@@ -258,13 +284,17 @@ public class FfmpegDemuxer implements SeekMap {
                 track.trackOutput.sampleData(ffmpegPacket.data, size);
                 sampleBytesWritten += size;
               }
-              track.trackOutput.sampleMetadata(ffmpegPacket.pts,ffmpegPacket.flags == 1 ? C.BUFFER_FLAG_KEY_FRAME : 0, sampleBytesWritten, 0, null);
+
+              track.setLastPts(ffmpegPacket.getTimeUs());
+              track.trackOutput.sampleMetadata(track.getTimeUs(),ffmpegPacket.flags == 1 ? C.BUFFER_FLAG_KEY_FRAME : 0, sampleBytesWritten, 0, null);
 
             } else {
               if (ffmpegPacket.data.capacity() > 0) {
                 ffmpegPacket.data.setPosition(0);
+
+                track.setLastPts(ffmpegPacket.getTimeUs());
                 track.trackOutput.sampleData(ffmpegPacket.data, ffmpegPacket.data.capacity());
-                track.trackOutput.sampleMetadata(ffmpegPacket.getTimeUs(),ffmpegPacket.flags == 1 ? C.BUFFER_FLAG_KEY_FRAME : 0, ffmpegPacket.data.capacity(), 0, null);
+                track.trackOutput.sampleMetadata(track.getTimeUs(),ffmpegPacket.flags == 1 ? C.BUFFER_FLAG_KEY_FRAME : 0, ffmpegPacket.data.capacity(), 0, null);
               }
              }
           }
@@ -274,6 +304,7 @@ public class FfmpegDemuxer implements SeekMap {
       if (customIo.isEos()) {
           return Extractor.RESULT_END_OF_INPUT;
       } else {
+
           return  Extractor.RESULT_CONTINUE ;
       }
     }
@@ -328,4 +359,6 @@ public class FfmpegDemuxer implements SeekMap {
   public SeekPoints getSeekPoints(long timeUs) {
     return new SeekPoints(SeekPoint.START);
   }
+
+
 }
